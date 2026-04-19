@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arthur Vignal — AI & Technology</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #000814;
+      --bg2: #001025;
+      --surface: rgba(0, 30, 60, 0.5);
+      --border: rgba(221, 255, 85, 0.12);
+      --text: #F6F2E8;
+      --text-soft: #C0D6EA;
+      --text-muted: #5a7d9a;
+      --accent: #DDFF55;
+      --accent-glow: rgba(221, 255, 85, 0.15);
+      --accent-soft: rgba(221, 255, 85, 0.07);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    ::selection { background: var(--accent); color: var(--bg); }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(20px);
+      background: rgba(0, 8, 20, 0.6);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+
+    nav .links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    nav .links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    nav .links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 40px;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(221,255,85,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      opacity: 0.8;
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 7vw, 88px);
+      font-weight: 700;
+      line-height: 1.05;
+      margin-bottom: 20px;
+      letter-spacing: -0.03em;
+    }
+
+    .hero h1 .accent { color: var(--accent); }
+
+    .hero .subtitle {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--text-soft);
+      max-width: 520px;
+      font-weight: 300;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .hero .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: #000814;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 0 var(--accent-glow);
+    }
+
+    .hero .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px var(--accent-glow), 0 4px 20px rgba(221,255,85,0.2);
+    }
+
+    .hero .cta svg { transition: transform 0.3s; }
+    .hero .cta:hover svg { transform: translateX(4px); }
+
+    /* ── SECTIONS ── */
+    section { padding: 100px 40px; }
+
+    .section-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      opacity: 0.7;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 700;
+      margin-bottom: 60px;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-soft), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .project-card:hover {
+      border-color: rgba(221, 255, 85, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 0 40px rgba(221, 255, 85, 0.08);
+    }
+
+    .project-card:hover::before { opacity: 1; }
+
+    .project-card .icon {
+      font-size: 32px;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .project-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .project-card .desc {
+      color: var(--text-soft);
+      font-size: 14px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    .project-card .stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .project-card .tag-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid rgba(221,255,85,0.15);
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── TECH ── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .tech-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.3s;
+    }
+
+    .tech-item:hover {
+      border-color: rgba(221,255,85,0.25);
+      background: rgba(0,30,60,0.8);
+    }
+
+    .tech-item .t-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .tech-item .t-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .tech-item .t-cat {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── ABOUT ── */
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1100px;
+    }
+
+    .about-text p {
+      color: var(--text-soft);
+      font-size: 17px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .about-text p strong { color: var(--accent); font-weight: 500; }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .glow-ring {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      border: 1px solid rgba(221,255,85,0.15);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .glow-ring::before {
+      content: '';
+      position: absolute;
+      inset: 20px;
+      border-radius: 50%;
+      border: 1px solid rgba(221,255,85,0.1);
+    }
+
+    .glow-ring .inner {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(221,255,85,0.2), rgba(221,255,85,0.05));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+    }
+
+    /* ── CONTACT ── */
+    #contact { text-align: center; }
+
+    .contact-links {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-soft);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .contact-link:hover {
+      border-color: rgba(221,255,85,0.3);
+      color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      nav .links { display: none; }
+      section { padding: 80px 24px; }
+      .hero { padding: 0 24px; }
+      .about-content { grid-template-columns: 1fr; gap: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">arthur_vignal</div>
+    <ul class="links">
+      <li><a href="#projects">Projetos</a></li>
+      <li><a href="#tech">Tecnologia</a></li>
+      <li><a href="#about">Sobre</a></li>
+      <li><a href="#contact">Contato</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="tag">// Built with AI</div>
+    <h1>Transformamos<br><span class="accent">ideias</span> em<br>produto.</h1>
+    <p class="subtitle">Desenvolvemos soluções inteligentes com inteligência artificial — de assistentes médicos a plataformas de aprendizado interativo.</p>
+    <a href="#projects" class="cta">
+      Ver projetos
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M5 12h14M13 6l6 6-6 6"/>
+      </svg>
+    </a>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-tag">// Work</div>
+    <h2 class="section-title">Projetos</h2>
+    <div class="projects-grid">
+
+      <div class="project-card" onclick="location.href='https://radioexperience.com.br'">
+        <span class="icon">🩻</span>
+        <h3>RadioeXperience</h3>
+        <p class="desc">Plataforma de ensino de radiologia com assistente IA (ARIA). Usa RAG com Qdrant, GPT-4o e BiomedCLIP para busca inteligente de conteúdo médico.</p>
+        <div class="stack">
+          <span class="tag-pill">FastAPI</span>
+          <span class="tag-pill">React</span>
+          <span class="tag-pill">Qdrant</span>
+          <span class="tag-pill">OpenAI</span>
+          <span class="tag-pill">Supabase</span>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="location.href='https://radioexperience.com.br'">
+        <span class="icon">🤖</span>
+        <h3>ARIA — Assistente IA</h3>
+        <p class="desc">Assistente de radiologia por IA integrado ao RadioeXperience. Responde perguntas, analisa imagens médicas e sugere diagnósticos baseados em evidências.</p>
+        <div class="stack">
+          <span class="tag-pill">GPT-4o</span>
+          <span class="tag-pill">BiomedCLIP</span>
+          <span class="tag-pill">RAG</span>
+          <span class="tag-pill">Vision API</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- TECH -->
+  <section id="tech">
+    <div class="section-tag">// Stack</div>
+    <h2 class="section-title">Tecnologia</h2>
+    <div class="tech-grid">
+
+      <div class="tech-item">
+        <span class="t-icon">⚡</span>
+        <div>
+          <div class="t-name">FastAPI</div>
+          <div class="t-cat">Backend</div>
+        </div>
+      </div>
+
+      <div class="tech-item">
+        <span class="t-icon">⚛</span>
+        <div>
+          <div class="t-name">React + Vite</div>
+          <div class="t-cat">Frontend</div>
+        </div>
+      </div>
+
+      <div class="tech-item">
+        <span class="t-icon">🗄</span>
+        <div>
+          <div class="t-name">Supabase</div>
+          <div class="t-cat">Database + Auth</div>
+        </div>
+      </div>
+
+      <div class="tech-item">
+        <span class="t-icon">🔍</span>
+        <div>
+          <div class="t-name">Qdrant</div>
+          <div class="t-cat">Vector DB</div>
+        </div>
+      </div>
+
+      <div class="tech-item">
+        <span class="t-icon">🤖</span>
+        <div>
+          <div class="t-name">OpenAI</div>
+          <div class="t-cat">LLM + Embeddings</div>
+        </div>
+      </div>
+
+      <div class="tech-item">
+        <span class="t-icon">🧠</span>
+        <div>
+          <div class="t-name">BiomedCLIP</div>
+          <div class="t-cat">Vision Embeddings</div>
+        </div>
+      </div>
+
+      <div class="tech-item">
+        <span class="t-icon">🌊</span>
+        <div>
+          <div class="t-name">Tailwind CSS</div>
+          <div class="t-cat">Styling</div>
+        </div>
+      </div>
+
+      <div class="tech-item">
+        <span class="t-icon">🚀</span>
+        <div>
+          <div class="t-name">Railway + Vercel</div>
+          <div class="t-cat">Deploy</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-tag">// About</div>
+    <h2 class="section-title">Quem somos</h2>
+    <div class="about-content">
+      <div class="about-text">
+        <p>Somos uma <strong>equipe brasileira</strong> especializada em desenvolvimento de produtos digitais com inteligência artificial. Combinamos conhecimento técnico em machine learning com experiência prática em produto para criar soluções que realmente funcionam.</p>
+        <p>Nosso projeto principal é o <strong>RadioeXperience</strong>, uma plataforma educacional que usa IA para transformar a forma como médicos e estudantes aprendem radiologia.</p>
+        <p>Trabalhamos com startups, clínicas e profissionais de saúde que querem incorporar inteligência artificial em seus processos — de forma prática, segura e escalável.</p>
+      </div>
+      <div class="about-visual">
+        <div class="glow-ring">
+          <div class="inner">🧬</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-tag">// Contact</div>
+    <h2 class="section-title">Vamos conversar</h2>
+    <p style="color: var(--text-soft); font-size: 16px; max-width: 480px; margin: 0 auto 20px;">
+      Tem um projeto em mente? Quer saber como IA pode ajudar no seu negócio?
+    </p>
+    <div class="contact-links">
+      <a href="mailto:arthurvignal@gmail.com" class="contact-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="M2 7l10 7 10-7"/>
+        </svg>
+        arthurvignal@gmail.com
+      </a>
+      <a href="https://github.com/arthur-vignal" class="contact-link" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        GitHub
+      </a>
+      <a href="https://wa.me/5521971752589" class="contact-link" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.613-2.019-.645-.295-.085-.54-.137-.763.137-.223.228-.815.814-1.001.983-.198.17-.397.198-.594.076-.217-.133-.914-.526-1.644-1.684-.56-1.083-.939-2.43-1.013-2.845-.086-.422-.043-.642-.226-.642-.178 0-.423.066-.648.272-.224.206-.382.515-.382.515s-1.605.756-1.87 1.946c-.265 1.19.21 2.34.444 2.75.23.41.5.818.864 1.11.376.302 1.036.936 1.38 1.23.355.303.603.274.803-.185.163-.378.545-.892.691-1.203.146-.31.734-.267 1.01-.148.275.118.924.516 1.103 1.71.18.595.358 1.19.774 1.37.415.18 1.74.174 2.47-.01.73-.182 1.22-.757 1.25-1.398.032-.641-.33-1.29-.74-1.74-.415-.448-1.03-.468-1.44-.31z"/>
+        </svg>
+        WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 Arthur Vignal — Feito com IA
+  </footer>
+
+</body>
+</html>
