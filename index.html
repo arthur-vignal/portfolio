@@ -1716,12 +1716,28 @@
       const size = heroGlobeSize();
       heroRenderer.setSize(size, size);
 
-      // Main sphere - visible dark blue
+      // Main sphere with Earth texture
       const earthGeo = new THREE.SphereGeometry(1, 64, 64);
-      const earthMat = new THREE.MeshBasicMaterial({
-        color: 0x00cc66,
+      const earthMat = new THREE.MeshPhongMaterial({
+        color: 0x8899aa,
+        specular: 0x223344,
+        shininess: 15,
       });
       const earth = new THREE.Mesh(earthGeo, earthMat);
+
+      // Try to load Earth texture
+      const heroTexLoader = new THREE.TextureLoader();
+      const heroTexUrl = 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg';
+      heroTexLoader.load(
+        heroTexUrl,
+        (tex) => {
+          earthMat.map = tex;
+          earthMat.needsUpdate = true;
+        },
+        undefined,
+        () => { /* fallback: keep solid color */ }
+      );
+
       heroScene.add(earth);
 
       // Bright wireframe grid
@@ -1780,16 +1796,44 @@
       let currentRotX = 0, currentRotY = 0;
       let globePhase = 0;
 
-      document.addEventListener('mousemove', (e) => {
+      // Drag rotation state
+      let heroIsDragging = false;
+      let heroLastX = 0, heroLastY = 0;
+
+      // Mouse down on hero globe area - start drag
+      heroGlobeCanvas.addEventListener('mousedown', (e) => {
         const rect = heroGlobeCanvas.getBoundingClientRect();
         if (e.clientX >= rect.left && e.clientX <= rect.right &&
             e.clientY >= rect.top && e.clientY <= rect.bottom) {
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
-          targetRotY = ((e.clientX - cx) / rect.width) * 0.4;
-          targetRotX = ((e.clientY - cy) / rect.height) * 0.3;
+          heroIsDragging = true;
+          heroLastX = e.clientX;
+          heroLastY = e.clientY;
         }
       });
+
+      // Mouse move - either drag globe or update parallax
+      document.addEventListener('mousemove', (e) => {
+        if (heroIsDragging) {
+          const dx = e.clientX - heroLastX;
+          const dy = e.clientY - heroLastY;
+          targetRotY += dx * 0.005;
+          targetRotX += dy * 0.005;
+          heroLastX = e.clientX;
+          heroLastY = e.clientY;
+        } else {
+          const rect = heroGlobeCanvas.getBoundingClientRect();
+          if (e.clientX >= rect.left && e.clientX <= rect.right &&
+              e.clientY >= rect.top && e.clientY <= rect.bottom) {
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            targetRotY = ((e.clientX - cx) / rect.width) * 0.4;
+            targetRotX = ((e.clientY - cy) / rect.height) * 0.3;
+          }
+        }
+      });
+
+      // Mouse up - stop drag
+      document.addEventListener('mouseup', () => { heroIsDragging = false; });
 
       function animate() {
         globePhase += 0.003;
@@ -2034,12 +2078,28 @@
     const iCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
     iCamera.position.z = 3;
 
-    // Earth - self-contained material, no external textures
+    // Earth with texture
     const iEarthGeo = new THREE.SphereGeometry(1, 64, 64);
-    const iEarthMat = new THREE.MeshBasicMaterial({
-      color: 0x00cc66,
+    const iEarthMat = new THREE.MeshPhongMaterial({
+      color: 0x8899aa,
+      specular: 0x223344,
+      shininess: 15,
     });
     const iEarth = new THREE.Mesh(iEarthGeo, iEarthMat);
+
+    // Load Earth texture with fallback
+    const iTexLoader = new THREE.TextureLoader();
+    const iTexUrl = 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg';
+    iTexLoader.load(
+      iTexUrl,
+      (tex) => {
+        iEarthMat.map = tex;
+        iEarthMat.needsUpdate = true;
+      },
+      undefined,
+      () => { /* fallback: keep solid color */ }
+    );
+
     iScene.add(iEarth);
 
     // Wireframe
@@ -2146,6 +2206,9 @@
       dataCard.style.top = top + 'px';
       dataCard.classList.add('visible');
       activeCountry = country;
+      // Stop auto-rotate when user clicks a country
+      autoRotate = false;
+      clearTimeout(autoRotateTimer);
     }
 
     function hideDataCard() {
@@ -2186,8 +2249,35 @@
       autoRotateTimer = setTimeout(() => { autoRotate = true; }, 3000);
     }
 
-    iGlobeCanvas.addEventListener('mousedown', () => {
-      resetAutoRotate();
+    // Drag rotation for interactive globe
+    let iIsDragging = false;
+    let iLastX = 0, iLastY = 0;
+    let iDragRotX = 0, iDragRotY = 0;
+
+    iGlobeCanvas.addEventListener('mousedown', (e) => {
+      const rect = iGlobeCanvas.getBoundingClientRect();
+      if (e.clientX >= rect.left && e.clientX <= rect.right &&
+          e.clientY >= rect.top && e.clientY <= rect.bottom) {
+        iIsDragging = true;
+        iLastX = e.clientX;
+        iLastY = e.clientY;
+        resetAutoRotate();
+      }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (iIsDragging) {
+        const dx = e.clientX - iLastX;
+        const dy = e.clientY - iLastY;
+        iDragRotY += dx * 0.005;
+        iDragRotX += dy * 0.005;
+        iLastX = e.clientX;
+        iLastY = e.clientY;
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      iIsDragging = false;
     });
 
     function animateIGlobe() {
@@ -2204,11 +2294,19 @@
       markerGroup.rotation.x = iEarth.rotation.x;
       markerGroup.rotation.z = iEarth.rotation.z;
 
-      // Slow auto-rotate Y
-      if (autoRotate) {
+      // Apply drag rotation when not auto-rotating
+      if (!autoRotate && iIsDragging) {
+        iEarth.rotation.y = iDragRotY;
+        iEarth.rotation.x = iDragRotX;
+        markerGroup.rotation.y = iDragRotY;
+        markerGroup.rotation.x = iDragRotX;
+      } else if (autoRotate) {
+        // Slow auto-rotate Y
         iCurrentRotY += 0.0008;
         iEarth.rotation.y = iCurrentRotY;
+        iEarth.rotation.x = iDragRotX; // keep drag X but auto Y
         markerGroup.rotation.y = iCurrentRotY;
+        markerGroup.rotation.x = iDragRotX;
       }
 
       // Pulse markers
