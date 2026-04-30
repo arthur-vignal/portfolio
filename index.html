@@ -1716,24 +1716,21 @@
       const size = heroGlobeSize();
       heroRenderer.setSize(size, size);
 
-      // Main sphere - dark with subtle gradient
+      // Main sphere - visible dark blue
       const earthGeo = new THREE.SphereGeometry(1, 64, 64);
-      const earthMat = new THREE.MeshPhongMaterial({
-        color: 0x0a1a2f,
-        emissive: 0x050d18,
-        specular: 0x111133,
-        shininess: 10,
+      const earthMat = new THREE.MeshBasicMaterial({
+        color: 0x0d2137,
       });
       const earth = new THREE.Mesh(earthGeo, earthMat);
       heroScene.add(earth);
 
       // Bright wireframe grid
-      const wireGeo = new THREE.SphereGeometry(1.005, 40, 40);
+      const wireGeo = new THREE.SphereGeometry(1.01, 40, 40);
       const wireMat = new THREE.MeshBasicMaterial({
-        color: 0xF5D000,
+        color: 0x1a6b4a,
         wireframe: true,
         transparent: true,
-        opacity: 0.08,
+        opacity: 0.25,
       });
       const wireframe = new THREE.Mesh(wireGeo, wireMat);
       heroScene.add(wireframe);
@@ -2007,19 +2004,16 @@
 
     // Earth - self-contained material, no external textures
     const iEarthGeo = new THREE.SphereGeometry(1, 64, 64);
-    const iEarthMat = new THREE.MeshPhongMaterial({
-      color: 0x0a1a2f,
-      emissive: 0x050d18,
-      specular: 0x111133,
-      shininess: 10,
+    const iEarthMat = new THREE.MeshBasicMaterial({
+      color: 0x0d2137,
     });
     const iEarth = new THREE.Mesh(iEarthGeo, iEarthMat);
     iScene.add(iEarth);
 
     // Wireframe
-    const iWireGeo = new THREE.SphereGeometry(1.005, 40, 40);
+    const iWireGeo = new THREE.SphereGeometry(1.01, 40, 40);
     const iWireMat = new THREE.MeshBasicMaterial({
-      color: 0xF5D000, wireframe: true, transparent: true, opacity: 0.08,
+      color: 0x1a6b4a, wireframe: true, transparent: true, opacity: 0.25,
     });
     const iWireframe = new THREE.Mesh(iWireGeo, iWireMat);
     iScene.add(iWireframe);
