@@ -1067,9 +1067,87 @@
       .values-grid { grid-template-columns: 1fr; }
       .estudos-grid { grid-template-columns: 1fr; }
       .lang-switcher { padding: 5px 8px; font-size: 9px; }
-      #interactive-globe { padding: 80px 24px; }
-      .iglobe-layout { grid-template-columns: 1fr; }
-      .iglobe-globe-col canvas { width: 320px !important; height: 320px !important; }
+      #interactive-globe { padding: 60px 0; }
+      .iglobe-headline { text-align: center; margin-bottom: 8px; font-size: clamp(28px, 4vw, 48px); }
+      .iglobe-sub { text-align: center; margin-bottom: 24px; color: #888; max-width: 500px; margin-left: auto; margin-right: auto; font-size: 14px; }
+
+      .map-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      .world-map {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        background: #050a12;
+      }
+
+      .country-dot {
+        fill: #F5D000;
+        stroke: #000;
+        stroke-width: 0.5;
+        cursor: pointer;
+        filter: drop-shadow(0 0 4px rgba(245,208,0,0.6));
+      }
+
+      .country-dot:hover { filter: drop-shadow(0 0 8px rgba(245,208,0,1)); }
+      .country-dot.selected { fill: #fff; filter: drop-shadow(0 0 12px rgba(255,255,255,1)); }
+
+      /* Data Card - slides from right */
+      .data-card {
+        position: fixed;
+        right: -400px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 320px;
+        background: rgba(10, 10, 18, 0.97);
+        border: 1.5px solid var(--yellow);
+        border-radius: 12px;
+        padding: 24px;
+        z-index: 1000;
+        transition: right 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        box-shadow: 0 0 40px rgba(245,208,0,0.15), 0 20px 60px rgba(0,0,0,0.5);
+        opacity: 1 !important;
+        transform: translateY(-50%) !important;
+        scale: 1 !important;
+      }
+
+      .data-card.visible { right: 24px; }
+
+      .data-card-close {
+        position: absolute;
+        top: 12px;
+        right: 14px;
+        background: none;
+        border: none;
+        color: #666;
+        font-size: 24px;
+        cursor: pointer;
+        line-height: 1;
+      }
+
+      .data-card-close:hover { color: var(--yellow); }
+
+      .data-card-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+      .data-card-flag { font-size: 40px; line-height: 1; }
+      .data-card-name { font-size: 22px; font-weight: 700; color: #fff; }
+      .data-card-sector { font-size: 13px; color: #F5D000; margin-top: 4px; }
+      .data-card-stats { display: flex; flex-direction: column; gap: 16px; }
+      .data-card-stat { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 14px; }
+      .data-card-stat-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+      .data-card-stat-value { font-size: 28px; font-weight: 700; color: var(--yellow); }
+
+      @media (max-width: 768px) {
+        .data-card { right: -100%; width: calc(100% - 32px); }
+        .data-card.visible { right: 16px; }
+      }
+    }
+    @keyframes mapPulse {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
     }
   </style>
 </head>
@@ -1154,32 +1232,31 @@
     </div>
   </div>
 
-  <!-- INTERACTIVE GLOBE -->
+  <!-- WORLD MAP SECTION -->
   <section id="interactive-globe">
-    <div class="iglobe-bg-glow"></div>
     <div class="section-label reveal" data-pt="// Explorar" data-en="// Explore">// Explorar</div>
-    <div class="iglobe-layout">
-      <div class="iglobe-globe-col">
-        <canvas id="interactiveGlobeCanvas"></canvas>
-      </div>
-      <div class="iglobe-text-col">
-        <h2 class="iglobe-headline reveal d1">
-          <span data-pt="As principais empresas do mundo usam IA." data-en="The world's leading companies are using AI.">As principais empresas do mundo usam IA.</span><br>
-          <span class="accent" data-pt="Tá esperando o quê?" data-en="What's holding you back?">Tá esperando o quê?</span>
-        </h2>
-        <p class="iglobe-sub reveal d2" data-pt="Explore os dados de adoção de IA ao redor do mundo. Cada ponto no globo representa um país que já está transformando sua economia com inteligência artificial — e o mercado só cresce." data-en="Explore AI adoption data from around the world. Each point on the globe represents a country already transforming its economy with artificial intelligence — and the market is only growing.">Explore os dados de adoção de IA ao redor do mundo. Cada ponto no globo representa um país que já está transformando sua economia com inteligência artificial — e o mercado só cresce.</p>
-        <a href="#services" class="iglobe-cta reveal d3">
-          <span data-pt="Veja o que oferecemos" data-en="See what we offer">Veja o que oferecemos</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-      </div>
+    <h2 class="iglobe-headline reveal d1">
+      <span data-pt="As principais empresas do mundo usam IA." data-en="The world's leading companies are using AI.">As principais empresas do mundo usam IA.</span><br>
+      <span class="accent" data-pt="Tá esperando o quê?" data-en="What's holding you back?">Tá esperando o quê?</span>
+    </h2>
+    <p class="iglobe-sub reveal d2" data-pt="Clique em um país para ver os dados de adoção de IA." data-en="Click on a country to see AI adoption data.">Clique em um país para ver os dados de adoção de IA.</p>
+
+    <!-- SVG World Map -->
+    <div class="map-container" id="mapContainer">
+      <svg class="world-map" id="worldMap" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
+        <!-- Simplified world map paths - Natural Earth style -->
+        <!-- Ocean background -->
+        <rect width="1000" height="500" fill="#050a12"/>
+        <!-- Countries will be drawn by JS -->
+        <g id="countriesGroup"></g>
+        <g id="markersGroup"></g>
+      </svg>
     </div>
   </section>
 
-  <!-- DATA CARD (floating) -->
+  <!-- DATA CARD (slides in from right) -->
   <div class="data-card" id="dataCard">
+    <button class="data-card-close" id="closeDataCard">&times;</button>
     <div class="data-card-header">
       <span class="data-card-flag" id="cardFlag">🇺🇸</span>
       <div>
@@ -1189,11 +1266,11 @@
     </div>
     <div class="data-card-stats">
       <div class="data-card-stat">
-        <div class="data-card-stat-label" data-pt="Empresas usando IA" data-en="Companies Using AI">Empresas usando IA</div>
+        <div class="data-card-stat-label" data-pt="Adoção de IA" data-en="AI Adoption">Empresas usando IA</div>
         <div class="data-card-stat-value" id="cardAdoption">78%</div>
       </div>
       <div class="data-card-stat">
-        <div class="data-card-stat-label" data-pt="Mercado de IA" data-en="AI Market Size">Mercado de IA</div>
+        <div class="data-card-stat-label" data-pt="Tamanho do mercado" data-en="Market Size">Mercado de IA</div>
         <div class="data-card-stat-value" id="cardMarket">$500B+</div>
       </div>
     </div>
@@ -1828,503 +1905,144 @@
       });
     }
 
-    initHeroGlobe();
+    // Hero globe disabled - user replacing with custom content
+    // initHeroGlobe();
 
     // ═══════════════════════════════════════════════
-    // INTERACTIVE GLOBE (Three.js)
-    // ═══════════════════════════════════════════════
-
-    // 20+ countries AI data
+    
+    // ── World Map Setup ──
     const countryData = [
-      {
-        name: 'United States', flag: '🇺🇸', lat: 37.09, lng: -95.71,
-        adoption: '78%', market: '$500B+',
-        sector: 'Tech & Research',
-        namePT: 'Estados Unidos'
-      },
-      {
-        name: 'China', flag: '🇨🇳', lat: 35.86, lng: 104.19,
-        adoption: '85%', market: '$150B+',
-        sector: 'Government & Industry',
-        namePT: 'China'
-      },
-      {
-        name: 'Brazil', flag: '🇧🇷', lat: -14.23, lng: -51.92,
-        adoption: '52%', market: '$8B+',
-        sector: 'Agile Adoption in LatAm',
-        namePT: 'Brasil'
-      },
-      {
-        name: 'United Kingdom', flag: '🇬🇧', lat: 55.37, lng: -3.43,
-        adoption: '65%', market: '$25B+',
-        sector: 'AI Research Hub',
-        namePT: 'Reino Unido'
-      },
-      {
-        name: 'Germany', flag: '🇩🇪', lat: 51.16, lng: 10.45,
-        adoption: '62%', market: '$22B+',
-        sector: 'Industry 4.0',
-        namePT: 'Alemanha'
-      },
-      {
-        name: 'India', flag: '🇮🇳', lat: 20.59, lng: 78.96,
-        adoption: '58%', market: '$12B+',
-        sector: 'Startup Growth',
-        namePT: 'Índia'
-      },
-      {
-        name: 'Japan', flag: '🇯🇵', lat: 36.20, lng: 138.25,
-        adoption: '55%', market: '$15B+',
-        sector: 'Robotics & Automation',
-        namePT: 'Japão'
-      },
-      {
-        name: 'Canada', flag: '🇨🇦', lat: 56.13, lng: -106.34,
-        adoption: '60%', market: '$10B+',
-        sector: 'AI Research (Mila)',
-        namePT: 'Canadá'
-      },
-      {
-        name: 'France', flag: '🇫🇷', lat: 46.22, lng: 2.21,
-        adoption: '56%', market: '$12B+',
-        sector: 'National AI Strategy',
-        namePT: 'França'
-      },
-      {
-        name: 'South Korea', flag: '🇰🇷', lat: 35.90, lng: 127.76,
-        adoption: '63%', market: '$8B+',
-        sector: 'Chaebol Investment',
-        namePT: 'Coreia do Sul'
-      },
-      {
-        name: 'Mexico', flag: '🇲🇽', lat: 23.63, lng: -102.55,
-        adoption: '38%', market: '$3B+',
-        sector: 'Manufacturing AI',
-        namePT: 'México'
-      },
-      {
-        name: 'Argentina', flag: '🇦🇷', lat: -38.41, lng: -63.61,
-        adoption: '34%', market: '$1.5B+',
-        sector: 'Startup Ecosystem',
-        namePT: 'Argentina'
-      },
-      {
-        name: 'Colombia', flag: '🇨🇴', lat: 4.57, lng: -74.29,
-        adoption: '30%', market: '$1B+',
-        sector: 'Emerging Tech Hub',
-        namePT: 'Colômbia'
-      },
-      {
-        name: 'Saudi Arabia', flag: '🇸🇦', lat: 23.88, lng: 45.07,
-        adoption: '55%', market: '$6B+',
-        sector: 'Vision 2030 AI',
-        namePT: 'Arábia Saudita'
-      },
-      {
-        name: 'UAE', flag: '🇦🇪', lat: 23.42, lng: 53.85,
-        adoption: '58%', market: '$4B+',
-        sector: 'Smart City AI',
-        namePT: 'EAU'
-      },
-      {
-        name: 'Singapore', flag: '🇸🇬', lat: 1.35, lng: 103.82,
-        adoption: '68%', market: '$5B+',
-        sector: 'Financial AI',
-        namePT: 'Singapura'
-      },
-      {
-        name: 'Australia', flag: '🇦🇺', lat: -25.27, lng: 133.77,
-        adoption: '54%', market: '$7B+',
-        sector: 'Resources & Health AI',
-        namePT: 'Austrália'
-      },
-      {
-        name: 'Israel', flag: '🇮🇱', lat: 31.04, lng: 34.78,
-        adoption: '57%', market: '$4B+',
-        sector: 'Cybersecurity AI',
-        namePT: 'Israel'
-      },
-      {
-        name: 'Sweden', flag: '🇸🇪', lat: 60.12, lng: 18.64,
-        adoption: '60%', market: '$4.5B+',
-        sector: 'Innovation & Sustainability',
-        namePT: 'Suécia'
-      },
-      {
-        name: 'Netherlands', flag: '🇳🇱', lat: 52.13, lng: 5.29,
-        adoption: '58%', market: '$5B+',
-        sector: 'Logistics & Agriculture AI',
-        namePT: 'Países Baixos'
-      },
-      {
-        name: 'Switzerland', flag: '🇨🇭', lat: 46.81, lng: 8.22,
-        adoption: '61%', market: '$4B+',
-        sector: 'Finance & Pharma AI',
-        namePT: 'Suíça'
-      },
-      {
-        name: 'Denmark', flag: '🇩🇰', lat: 56.26, lng: 9.50,
-        adoption: '55%', market: '$2.5B+',
-        sector: 'Green AI & Life Sciences',
-        namePT: 'Dinamarca'
-      },
-      {
-        name: 'Nigeria', flag: '🇳🇬', lat: 9.08, lng: 8.67,
-        adoption: '25%', market: '$0.8B+',
-        sector: 'Fintech AI',
-        namePT: 'Nigéria'
-      },
-      {
-        name: 'South Africa', flag: '🇿🇦', lat: -30.55, lng: 22.93,
-        adoption: '35%', market: '$1.2B+',
-        sector: 'Mining & Telecom AI',
-        namePT: 'África do Sul'
-      },
-      {
-        name: 'Spain', flag: '🇪🇸', lat: 40.46, lng: -3.74,
-        adoption: '48%', market: '$5B+',
-        sector: 'Tourism & Energy AI',
-        namePT: 'Espanha'
-      },
-      {
-        name: 'Italy', flag: '🇮🇹', lat: 41.87, lng: 12.56,
-        adoption: '44%', market: '$4B+',
-        sector: 'Manufacturing AI',
-        namePT: 'Itália'
-      },
-      {
-        name: 'Poland', flag: '🇵🇱', lat: 51.91, lng: 19.14,
-        adoption: '42%', market: '$3B+',
-        sector: 'BPO & IT Services AI',
-        namePT: 'Polônia'
-      },
-      {
-        name: 'Indonesia', flag: '🇮🇩', lat: -0.78, lng: 113.92,
-        adoption: '32%', market: '$3B+',
-        sector: 'Digital Economy AI',
-        namePT: 'Indonésia'
-      },
-      {
-        name: 'Vietnam', flag: '🇻🇳', lat: 14.05, lng: 108.27,
-        adoption: '28%', market: '$1.5B+',
-        sector: 'Manufacturing AI',
-        namePT: 'Vietnã'
-      },
-      {
-        name: 'Thailand', flag: '🇹🇭', lat: 15.87, lng: 100.99,
-        adoption: '36%', market: '$2.5B+',
-        sector: 'Tourism & Agriculture AI',
-        namePT: 'Tailândia'
-      },
+      { name: 'USA', code: 'US', flag: '🇺🇸', lat: 37.09, lng: -95.71, adoption: '89%', market: '$201B+', sector: 'Enterprise AI', namePT: 'Estados Unidos', color: '#F5D000' },
+      { name: 'China', code: 'CN', flag: '🇨🇳', lat: 35.86, lng: 104.19, adoption: '82%', market: '$161B+', sector: 'Computer Vision', namePT: 'China', color: '#F5D000' },
+      { name: 'UK', code: 'GB', flag: '🇬🇧', lat: 55.37, lng: -3.43, adoption: '78%', market: '$45B+', sector: 'Fintech AI', namePT: 'Reino Unido', color: '#F5D000' },
+      { name: 'Germany', code: 'DE', flag: '🇩🇪', lat: 51.16, lng: 10.45, adoption: '77%', market: '$32B+', sector: 'Industrial AI', namePT: 'Alemanha', color: '#F5D000' },
+      { name: 'France', code: 'FR', flag: '🇫🇷', lat: 46.22, lng: 2.21, adoption: '75%', market: '$28B+', sector: 'Defense AI', namePT: 'França', color: '#F5D000' },
+      { name: 'Japan', code: 'JP', flag: '🇯🇵', lat: 36.20, lng: 138.25, adoption: '86%', market: '$91B+', sector: 'Robotics AI', namePT: 'Japão', color: '#F5D000' },
+      { name: 'South Korea', code: 'KR', flag: '🇰🇷', lat: 35.90, lng: 127.76, adoption: '84%', market: '$35B+', sector: 'Semiconductor AI', namePT: 'Coreia do Sul', color: '#F5D000' },
+      { name: 'Canada', code: 'CA', flag: '🇨🇦', lat: 56.13, lng: -106.34, adoption: '79%', market: '$20B+', sector: 'Research AI', namePT: 'Canadá', color: '#F5D000' },
+      { name: 'Australia', code: 'AU', flag: '🇦🇺', lat: -25.27, lng: 133.77, adoption: '76%', market: '$18B+', sector: 'Resources AI', namePT: 'Austrália', color: '#F5D000' },
+      { name: 'India', code: 'IN', flag: '🇮🇳', lat: 20.59, lng: 78.96, adoption: '73%', market: '$28B+', sector: 'IT Services AI', namePT: 'Índia', color: '#F5D000' },
+      { name: 'Brazil', code: 'BR', flag: '🇧🇷', lat: -14.23, lng: -51.92, adoption: '68%', market: '$10B+', sector: 'Finance AI', namePT: 'Brasil', color: '#c4a000' },
+      { name: 'Singapore', code: 'SG', flag: '🇸🇬', lat: 1.35, lng: 103.82, adoption: '85%', market: '$12B+', sector: 'Smart Nation AI', namePT: 'Singapura', color: '#F5D000' },
+      { name: 'Israel', code: 'IL', flag: '🇮🇱', lat: 31.04, lng: 34.85, adoption: '83%', market: '$9B+', sector: 'Cybersecurity AI', namePT: 'Israel', color: '#F5D000' },
+      { name: 'Netherlands', code: 'NL', flag: '🇳🇱', lat: 52.13, lng: 5.29, adoption: '74%', market: '$14B+', sector: 'Logistics AI', namePT: 'Holanda', color: '#F5D000' },
+      { name: 'Sweden', code: 'SE', flag: '🇸🇪', lat: 60.12, lng: 18.64, adoption: '72%', market: '$8B+', sector: 'Gaming AI', namePT: 'Suécia', color: '#F5D000' },
+      { name: 'Switzerland', code: 'CH', flag: '🇨🇭', lat: 46.81, lng: 8.22, adoption: '71%', market: '$7B+', sector: 'Finance AI', namePT: 'Suíça', color: '#F5D000' },
+      { name: 'UAE', code: 'AE', flag: '🇦🇪', lat: 23.42, lng: 53.85, adoption: '81%', market: '$8B+', sector: 'Smart City AI', namePT: 'Emirados', color: '#F5D000' },
+      { name: 'Saudi Arabia', code: 'SA', flag: '🇸🇦', lat: 23.88, lng: 45.07, adoption: '69%', market: '$6B+', sector: 'Energy AI', namePT: 'Arábia Saudita', color: '#c4a000' },
+      { name: 'Spain', code: 'ES', flag: '🇪🇸', lat: 40.46, lng: -3.74, adoption: '67%', market: '$11B+', sector: 'Tourism AI', namePT: 'Espanha', color: '#c4a000' },
+      { name: 'Mexico', code: 'MX', flag: '🇲🇽', lat: 23.63, lng: -102.55, adoption: '58%', market: '$4B+', sector: 'Manufacturing AI', namePT: 'México', color: '#c4a000' },
+      { name: 'Indonesia', code: 'ID', flag: '🇮🇩', lat: -0.78, lng: 113.92, adoption: '32%', market: '$3B+', sector: 'Digital Economy AI', namePT: 'Indonésia', color: '#6b5a00' },
+      { name: 'Vietnam', code: 'VN', flag: '🇻🇳', lat: 14.05, lng: 108.27, adoption: '28%', market: '$1.5B+', sector: 'Manufacturing AI', namePT: 'Vietnã', color: '#6b5a00' },
+      { name: 'Thailand', code: 'TH', flag: '🇹🇭', lat: 15.87, lng: 100.99, adoption: '36%', market: '$2.5B+', sector: 'Tourism AI', namePT: 'Tailândia', color: '#6b5a00' },
+      { name: 'Nigeria', code: 'NG', flag: '🇳🇬', lat: 9.08, lng: 8.67, adoption: '23%', market: '$1B+', sector: 'Fintech AI', namePT: 'Nigéria', color: '#2a2400' },
+      { name: 'Kenya', code: 'KE', flag: '🇰🇪', lat: -0.02, lng: 37.90, adoption: '21%', market: '$0.8B+', sector: 'Mobile AI', namePT: 'Quênia', color: '#2a2400' },
+      { name: 'South Africa', code: 'ZA', flag: '🇿🇦', lat: -30.55, lng: 22.93, adoption: '26%', market: '$1.2B+', sector: 'Mining AI', namePT: 'África do Sul', color: '#2a2400' },
+      { name: 'Egypt', code: 'EG', flag: '🇪🇬', lat: 26.82, lng: 30.80, adoption: '24%', market: '$0.9B+', sector: 'Agriculture AI', namePT: 'Egito', color: '#2a2400' },
+      { name: 'Poland', code: 'PL', flag: '🇵🇱', lat: 51.91, lng: 19.14, adoption: '61%', market: '$5B+', sector: 'BPO AI', namePT: 'Polônia', color: '#c4a000' },
+      { name: 'Turkey', code: 'TR', flag: '🇹🇷', lat: 38.96, lng: 35.24, adoption: '54%', market: '$4B+', sector: 'Defense AI', namePT: 'Turquia', color: '#c4a000' },
+      { name: 'Argentina', code: 'AR', flag: '🇦🇷', lat: -38.41, lng: -63.61, adoption: '47%', market: '$2B+', sector: 'AgTech AI', namePT: 'Argentina', color: '#6b5a00' },
     ];
 
-    // ── Interactive Globe Three.js Setup ──
-    const iGlobeCanvas = document.getElementById('interactiveGlobeCanvas');
-    const iRenderer = new THREE.WebGLRenderer({ canvas: iGlobeCanvas, alpha: true, antialias: true });
-    iRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    function getIGlobeSize() {
-      const vw = window.innerWidth;
-      if (vw >= 1024) return 520;
-      if (vw >= 768) return 400;
-      return 320;
-    }
-    const iSize = getIGlobeSize();
-    iRenderer.setSize(iSize, iSize);
-
-    const iScene = new THREE.Scene();
-    const iCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-    iCamera.position.z = 3;
-
-    // Earth with texture
-    const iEarthGeo = new THREE.SphereGeometry(1, 64, 64);
-    const iEarthMat = new THREE.MeshPhongMaterial({
-      color: 0x8899aa,
-      specular: 0x223344,
-      shininess: 15,
-    });
-    const iEarth = new THREE.Mesh(iEarthGeo, iEarthMat);
-
-    // Load Earth texture with fallback
-    const iTexLoader = new THREE.TextureLoader();
-    const iTexUrl = 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg';
-    iTexLoader.load(
-      iTexUrl,
-      (tex) => {
-        iEarthMat.map = tex;
-        iEarthMat.needsUpdate = true;
-      },
-      undefined,
-      () => { /* fallback: keep solid color */ }
-    );
-
-    iScene.add(iEarth);
-
-    // Atmosphere shell for interactive globe (very subtle, no wireframe)
-    const iAtmosGeo = new THREE.SphereGeometry(1.03, 32, 32);
-    const iAtmosMat = new THREE.MeshBasicMaterial({
-      color: 0x1a4a6e,
-      wireframe: false,
-      transparent: true,
-      opacity: 0.12,
-    });
-    const iAtmosphere = new THREE.Mesh(iAtmosGeo, iAtmosMat);
-    iScene.add(iAtmosphere);
-
-    // Lights
-    const iAmbient = new THREE.AmbientLight(0xffffff, 0.3);
-    iScene.add(iAmbient);
-    const iDir = new THREE.DirectionalLight(0xffffff, 1.2);
-    iDir.position.set(5, 3, 5);
-    iScene.add(iDir);
-    const iPoint = new THREE.PointLight(0x3a8fff, 0.5, 10);
-    iPoint.position.set(-3, -2, 3);
-    iScene.add(iPoint);
-
-    function latLngToVec3(lat, lng, radius) {
-      const phi = (90 - lat) * (Math.PI / 180);
-      const theta = (lng + 180) * (Math.PI / 180);
-      return new THREE.Vector3(
-        -radius * Math.sin(phi) * Math.cos(theta),
-        radius * Math.cos(phi),
-        radius * Math.sin(phi) * Math.sin(theta)
-      );
+    function latLngToXY(lat, lng) {
+      const x = (lng + 180) * (1000 / 360);
+      const latRad = lat * Math.PI / 180;
+      const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
+      const y = 250 - mercN * (1000 / (2 * Math.PI));
+      return { x, y };
     }
 
-    // Create country markers
-    const markerGroup = new THREE.Group();
-    const markerMeshes = [];
+    function initWorldMap() {
+      const countriesGroup = document.getElementById('countriesGroup');
+      const markersGroup = document.getElementById('markersGroup');
+      if (!countriesGroup || !markersGroup) return;
 
-    countryData.forEach((country, i) => {
-      const pos = latLngToVec3(country.lat, country.lng, 1.025);
+      const landmasses = [
+        { path: 'M 50,50 L 280,50 L 280,190 L 50,190 Z', fill: '#0a1520' },
+        { path: 'M 200,200 L 280,200 L 300,380 L 240,430 L 200,350 Z', fill: '#0a1520' },
+        { path: 'M 440,50 L 560,50 L 570,150 L 450,150 Z', fill: '#0a1520' },
+        { path: 'M 440,160 L 540,160 L 570,360 L 470,400 L 440,300 Z', fill: '#0a1520' },
+        { path: 'M 540,50 L 920,50 L 920,160 L 540,160 Z', fill: '#0a1520' },
+        { path: 'M 560,150 L 640,150 L 650,240 L 580,240 Z', fill: '#0a1520' },
+        { path: 'M 660,180 L 760,180 L 770,300 L 680,300 Z', fill: '#0a1520' },
+        { path: 'M 780,200 L 880,200 L 890,320 L 790,320 Z', fill: '#0a1520' },
+        { path: 'M 800,80 L 920,80 L 920,180 L 800,180 Z', fill: '#0a1520' },
+        { path: 'M 820,320 L 920,320 L 920,420 L 820,420 Z', fill: '#0a1520' },
+        { path: 'M 280,30 L 400,30 L 400,140 L 280,140 Z', fill: '#0a1520' },
+        { path: 'M 430,60 L 460,60 L 462,115 L 430,115 Z', fill: '#0a1520' },
+        { path: 'M 760,270 L 860,270 L 860,310 L 760,310 Z', fill: '#0a1520' },
+      ];
 
-      // Outer glow ring (removed - no yellow rings)
-      const ringGeo = new THREE.RingGeometry(0.022, 0.032, 16);
+      landmasses.forEach(function(lm) {
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', lm.path);
+        path.setAttribute('fill', lm.fill);
+        path.setAttribute('stroke', '#1a3a5a');
+        path.setAttribute('stroke-width', '0.5');
+        countriesGroup.appendChild(path);
+      });
 
-      // Core dot
-      const markerGeo = new THREE.SphereGeometry(0.025, 8, 8);
-      const markerMat = new THREE.MeshBasicMaterial({ color: 0xF5D000 });
-      const marker = new THREE.Mesh(markerGeo, markerMat);
-      marker.position.copy(pos);
-      marker.userData = { countryIndex: i, originalScale: 1 };
-      markerMeshes.push(marker);
-      markerGroup.add(marker);
+      countryData.forEach(function(country, i) {
+        const pos = latLngToXY(country.lat, country.lng);
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', pos.x);
+        circle.setAttribute('cy', pos.y);
+        circle.setAttribute('r', '7');
+        circle.setAttribute('class', 'country-dot');
+        circle.setAttribute('data-index', i);
+        circle.setAttribute('fill', country.color);
+        circle.setAttribute('stroke', '#000');
+        circle.setAttribute('stroke-width', '0.5');
+        circle.style.filter = 'drop-shadow(0 0 4px ' + country.color + '80)';
+        circle.style.animation = 'mapPulse 2.5s ease-in-out ' + (i * 0.08) + 's infinite';
 
-      // Invisible hitbox for easier click/hover detection
-      const hitboxGeo = new THREE.SphereGeometry(0.08, 8, 8);
-      const hitboxMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
-      const hitbox = new THREE.Mesh(hitboxGeo, hitboxMat);
-      hitbox.position.copy(pos);
-      hitbox.userData = { countryIndex: i, originalScale: 1 };
-      markerMeshes.push(hitbox);
-      markerGroup.add(hitbox);
-    });
+        circle.addEventListener('click', function() { selectCountry(i, circle); });
+        circle.addEventListener('mouseenter', function(e) { showDataCard(country, e); });
+        markersGroup.appendChild(circle);
+      });
+    }
 
-    iScene.add(markerGroup);
-
-    // Raycaster for click detection
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-
-    // Data card element
-    const dataCard = document.getElementById('dataCard');
-    let activeCountry = null;
-
-    function showDataCard(country, clientX, clientY) {
-      const name = currentLang === 'pt' ? (country.namePT || country.name) : country.name;
+    function selectCountry(index, circleEl) {
+      document.querySelectorAll('.country-dot.selected').forEach(function(el) { el.classList.remove('selected'); });
+      circleEl.classList.add('selected');
+      var country = countryData[index];
+      var name = (typeof currentLang !== 'undefined' && currentLang === 'pt') ? (country.namePT || country.name) : country.name;
       document.getElementById('cardFlag').textContent = country.flag;
       document.getElementById('cardName').textContent = name;
       document.getElementById('cardSector').textContent = country.sector;
       document.getElementById('cardAdoption').textContent = country.adoption;
       document.getElementById('cardMarket').textContent = country.market;
+      document.getElementById('dataCard').classList.add('visible');
+    }
 
-      // Position card
-      const cardW = 280, cardH = 200;
-      let left = clientX + 20;
-      let top = clientY - 20;
-      if (left + cardW > window.innerWidth - 10) left = clientX - cardW - 20;
-      if (top + cardH > window.innerHeight - 10) top = clientY - cardH - 20;
-
-      dataCard.style.left = left + 'px';
-      dataCard.style.top = top + 'px';
-      dataCard.classList.add('visible');
-      activeCountry = country;
-      // Stop auto-rotate when user clicks a country
-      autoRotate = false;
-      clearTimeout(autoRotateTimer);
+    function showDataCard(country, evt) {
+      var name = (typeof currentLang !== 'undefined' && currentLang === 'pt') ? (country.namePT || country.name) : country.name;
+      document.getElementById('cardFlag').textContent = country.flag;
+      document.getElementById('cardName').textContent = name;
+      document.getElementById('cardSector').textContent = country.sector;
+      document.getElementById('cardAdoption').textContent = country.adoption;
+      document.getElementById('cardMarket').textContent = country.market;
+      document.getElementById('dataCard').classList.add('visible');
     }
 
     function hideDataCard() {
-      dataCard.classList.remove('visible');
-      activeCountry = null;
+      document.getElementById('dataCard').classList.remove('visible');
     }
 
-    iGlobeCanvas.addEventListener('mousemove', (e) => {
-      const rect = iGlobeCanvas.getBoundingClientRect();
-      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, iCamera);
-      const intersects = raycaster.intersectObjects(markerMeshes);
-
-      if (intersects.length > 0) {
-        const idx = intersects[0].object.userData.countryIndex;
-        showDataCard(countryData[idx], e.clientX, e.clientY);
-        cursor.classList.add('hover');
-      } else {
-        hideDataCard();
-        cursor.classList.remove('hover');
-      }
+    document.getElementById('closeDataCard').addEventListener('click', function() {
+      document.getElementById('dataCard').classList.remove('visible');
+      document.querySelectorAll('.country-dot.selected').forEach(function(el) { el.classList.remove('selected'); });
     });
 
-    iGlobeCanvas.addEventListener('mouseleave', hideDataCard);
-
-    // Auto-rotate for interactive globe (only when not stopped by user)
-    let iTargetRotY = 0;
-    let iCurrentRotY = 0;
-    let autoRotate = true;
-    let autoRotateTimer = null;
-
-    function resetAutoRotate() {
-      autoRotate = false;
-      clearTimeout(autoRotateTimer);
+    // Init on load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initWorldMap);
+    } else {
+      initWorldMap();
     }
 
-    function resumeAutoRotate() {
-      autoRotate = true;
-    }
-    window.resumeGlobeRotation = resumeAutoRotate; // expose for UI call
-
-    // Drag rotation for interactive globe
-    let iIsDragging = false;
-    let iLastX = 0, iLastY = 0;
-    let iDragRotX = 0, iDragRotY = 0;
-
-    iGlobeCanvas.addEventListener('mousedown', (e) => {
-      const rect = iGlobeCanvas.getBoundingClientRect();
-      if (e.clientX >= rect.left && e.clientX <= rect.right &&
-          e.clientY >= rect.top && e.clientY <= rect.bottom) {
-        iIsDragging = true;
-        iLastX = e.clientX;
-        iLastY = e.clientY;
-        resetAutoRotate();
-      }
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (iIsDragging) {
-        const dx = e.clientX - iLastX;
-        const dy = e.clientY - iLastY;
-        iDragRotY += dx * 0.005;
-        iDragRotX += dy * 0.005;
-        iLastX = e.clientX;
-        iLastY = e.clientY;
-      }
-    });
-
-    document.addEventListener('mouseup', () => {
-      iIsDragging = false;
-    });
-
-    function animateIGlobe() {
-      // PAUSE: when autoRotate is false and not dragging, globe stays still
-      if (!autoRotate && !iIsDragging) {
-        iRenderer.render(iScene, iCamera);
-        requestAnimationFrame(animateIGlobe);
-        return;
-      }
-
-      // DRAG mode: user manually rotated
-      if (!autoRotate && iIsDragging) {
-        iEarth.rotation.y = iDragRotY;
-        iEarth.rotation.x = iDragRotX;
-        markerGroup.rotation.y = iDragRotY;
-        markerGroup.rotation.x = iDragRotX;
-        iAtmosphere.rotation.y = iDragRotY;
-        iAtmosphere.rotation.x = iDragRotX;
-        iAtmosphere.rotation.z = iDragRotX;
-      }
-      // AUTO-ROTATE mode
-      else if (autoRotate) {
-        iCurrentRotY += 0.0008;
-        iEarth.rotation.y = iCurrentRotY;
-        iEarth.rotation.x = iDragRotX;
-        markerGroup.rotation.y = iCurrentRotY;
-        markerGroup.rotation.x = iDragRotX;
-        iAtmosphere.rotation.y = iCurrentRotY;
-        iAtmosphere.rotation.x = iDragRotX;
-        iAtmosphere.rotation.z = iDragRotX;
-      }
-
-      iRenderer.render(iScene, iCamera);
-      requestAnimationFrame(animateIGlobe);
-    }
-
-    function resizeIGlobe() {
-      const s = getIGlobeSize();
-      iRenderer.setSize(s, s);
-      iCamera.aspect = 1;
-      iCamera.updateProjectionMatrix();
-    }
-
-    animateIGlobe();
-    window.addEventListener('resize', resizeIGlobe);
-
-    // ═══════════════════════════════════════════════
-    // GRID CANVAS
-    // ═══════════════════════════════════════════════
-    const canvas = document.getElementById('gridCanvas');
-    const ctx = canvas.getContext('2d');
-    let W, H, phase = 0, angle = 0;
-
-    function resizeGrid() {
-      W = canvas.width = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    }
-    resizeGrid();
-    window.addEventListener('resize', resizeGrid);
-
-    function drawGrid() {
-      ctx.clearRect(0, 0, W, H);
-      phase += 0.004;
-      angle += 0.001;
-
-      const oy = H - 66;
-      const ox = 86;
-
-      for (let i = 0; i < 16; i++) {
-        const a = (Math.PI * 2 / 16) * i + angle;
-        ctx.beginPath();
-        ctx.moveTo(ox, oy);
-        for (let s = 1; s <= 80; s++) {
-          const t = s / 80;
-          const radius = t * Math.max(W, H) * 1.5;
-          const x = ox + Math.cos(a) * radius;
-          const y = oy + Math.sin(a) * radius * 0.3;
-          if (s === 1) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = 'rgba(255,255,255,0.025)';
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-      }
-
-      for (let r = 1; r <= 12; r++) {
-        const baseRadius = r * (Math.min(W, H) * 0.5) / 12;
-        const wave = Math.sin(phase + r * 0.4) * 8;
-        ctx.beginPath();
-        ctx.ellipse(ox, oy, baseRadius + wave, (baseRadius + wave) * 0.3, 0, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(255,255,255,${0.015 + r * 0.005})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-      }
-
-      requestAnimationFrame(drawGrid);
-    }
-    drawGrid();
-
-    // ═══════════════════════════════════════════════
-    // FLOATING PARTICLES
+    // ── Floating Particles ──
+// FLOATING PARTICLES
     // ═══════════════════════════════════════════════
     const particlesCanvas = document.getElementById('particlesCanvas');
     const pCtx = particlesCanvas.getContext('2d');
