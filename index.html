@@ -489,6 +489,127 @@
       color: var(--text-soft);
     }
 
+    /* ── COMPANIES ── */
+    .companies-intro {
+      font-size: clamp(15px, 1.8vw, 19px);
+      color: var(--text-soft);
+      max-width: 680px;
+      line-height: 1.7;
+      margin-top: -40px;
+      margin-bottom: 60px;
+      font-weight: 300;
+    }
+    .companies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 20px;
+    }
+    .company-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .company-card:hover {
+      border-color: rgba(245,208,0,0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 40px rgba(245,208,0,0.04);
+    }
+    .company-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--line);
+    }
+    .company-logo {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: var(--yellow-dim);
+      border: 1px solid rgba(245,208,0,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 800;
+      color: var(--yellow);
+      flex-shrink: 0;
+    }
+    .company-name {
+      font-size: 17px; font-weight: 700;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+    .company-sector {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--yellow);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .company-body { padding: 20px 28px 24px; }
+    .ba-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .ba-before, .ba-after {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .ba-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      margin-bottom: 4px;
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .ba-before .ba-label {
+      color: #666;
+      background: rgba(255,255,255,0.05);
+    }
+    .ba-after .ba-label {
+      color: var(--yellow);
+      background: var(--yellow-dim);
+    }
+    .ba-arrow {
+      font-size: 20px; color: var(--text-muted);
+      padding-top: 24px;
+      flex-shrink: 0;
+    }
+    .ba-before ul, .ba-after ul {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .ba-before li, .ba-after li {
+      font-size: 11.5px; color: var(--text-soft);
+      line-height: 1.5;
+      padding-left: 12px;
+      position: relative;
+    }
+    .ba-before li::before {
+      content: '';
+      position: absolute; left: 0; top: 7px;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+    }
+    .ba-after li::before {
+      content: '';
+      position: absolute; left: 0; top: 7px;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--yellow);
+      opacity: 0.6;
+    }
+    .ba-before li { color: #666; }
+    .ba-after li { color: var(--text-soft); }
+
+    @media (max-width: 768px) {
+      .companies-grid { grid-template-columns: 1fr; }
+      .ba-row { grid-template-columns: 1fr; gap: 12px; }
+      .ba-arrow { display: none; }
+    }
+
     /* ── SERVICES ── */
     #services { background: var(--bg-2); }
     .services-grid {
@@ -1232,49 +1353,356 @@
     </div>
   </div>
 
-  <!-- WORLD MAP SECTION -->
-  <section id="interactive-globe">
-    <div class="section-label reveal" data-pt="// Explorar" data-en="// Explore">// Explorar</div>
-    <h2 class="iglobe-headline reveal d1">
-      <span data-pt="As principais empresas do mundo usam IA." data-en="The world's leading companies are using AI.">As principais empresas do mundo usam IA.</span><br>
-      <span class="accent" data-pt="Tá esperando o quê?" data-en="What's holding you back?">Tá esperando o quê?</span>
-    </h2>
-    <p class="iglobe-sub reveal d2" data-pt="Clique em um país para ver os dados de adoção de IA." data-en="Click on a country to see AI adoption data.">Clique em um país para ver os dados de adoção de IA.</p>
+  <!-- AI COMPANIES SECTION -->
+  <section id="companies">
+    <div class="section-label reveal" data-pt="// Cases" data-en="// Cases">// Cases</div>
+    <h2 class="section-title reveal" data-pt="A revolu\u00e7\u00e3o silenciosa" data-en="The silent revolution">A revolu\u00e7\u00e3o silenciosa</h2>
+    <p class="companies-intro reveal d1" data-pt="Grandes empresas j\u00e1 consolidadas n\u00e3o esperan a 'pr\u00f3xima' IA. Elas j\u00e1 a aplicaram. Veja o impacto real." data-en="Established giants aren't waiting for the 'next' AI. They already applied it. See the real impact.">Grandes empresas j\u00e1 consolidadas n\u00e3o esperan a 'pr\u00f3xima' IA. Elas j\u00e1 a aplicaram. Veja o impacto real.</p>
 
-    <!-- SVG World Map -->
-    <div class="map-container" id="mapContainer">
-      <svg class="world-map" id="worldMap" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
-        <!-- Simplified world map paths - Natural Earth style -->
-        <!-- Ocean background -->
-        <rect width="1000" height="500" fill="#050a12"/>
-        <!-- Countries will be drawn by JS -->
-        <g id="countriesGroup"></g>
-        <g id="markersGroup"></g>
-      </svg>
+    <div class="companies-grid">
+
+      <!-- AMAZON -->
+      <div class="company-card reveal d1">
+        <div class="company-header">
+          <span class="company-logo">\u2261</span>
+          <div>
+            <h3 class="company-name">Amazon</h3>
+            <span class="company-sector">E-commerce & Cloud</span>
+          </div>
+        </div>
+        <div class="company-body">
+          <div class="ba-row">
+            <div class="ba-before">
+              <span class="ba-label">ANTES</span>
+              <ul>
+                <li>Recomenda\u00e7\u00f5es baseadas em popularity local</li>
+                <li>Separa\u00e7\u00e3o manual: 3-4 horas por pedido</li>
+                <li>Atendimento: 7.000+ funcion\u00e1rios, 8-12 min de espera</li>
+                <li>Taxa de resolu\u00e7\u00e3o no 1\u00ba contato: 45%</li>
+              </ul>
+            </div>
+            <div class="ba-arrow">\u2192</div>
+            <div class="ba-after">
+              <span class="ba-label">DEPOIS</span>
+              <ul>
+                <li>35% das compras via recommendation engine de ML</li>
+                <li>Separa\u00e7\u00e3o automatizada: 15 minutos</li>
+                <li>IA resolve 90%+ das intera\u00e7\u00f5es antes de escalar</li>
+                <li>Resolu\u00e7\u00e3o no 1\u00ba contato: 80%+</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NETFLIX -->
+      <div class="company-card reveal d2">
+        <div class="company-header">
+          <span class="company-logo">\u25b6</span>
+          <div>
+            <h3 class="company-name">Netflix</h3>
+            <span class="company-sector">Streaming</span>
+          </div>
+        </div>
+        <div class="company-body">
+          <div class="ba-row">
+            <div class="ba-before">
+              <span class="ba-label">ANTES</span>
+              <ul>
+                <li>Conte\u00fado id\u00eantico para todos os 260M+ usu\u00e1rios</li>
+                <li>Usu\u00e1rio passava 18-22 min navegando para escolher</li>
+                <li>Encoding fixo \u2014 quem tinha internet lenta buffering</li>
+                <li>Churn de 5.5% ao m\u00eas</li>
+              </ul>
+            </div>
+            <div class="ba-arrow">\u2192</div>
+            <div class="ba-after">
+              <span class="ba-label">DEPOIS</span>
+              <ul>
+                <li>Homepage 100% personalizada por usu\u00e1rio</li>
+                <li>Engajamento aumenta 80% com ML ranking</li>
+                <li>Codec adaptativo: 40% melhor qualidade, 30% menos banda</li>
+                <li>Churn cai para 2.3% ao m\u00eas</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JPMORGAN -->
+      <div class="company-card reveal d3">
+        <div class="company-header">
+          <span class="company-logo">JP</span>
+          <div>
+            <h3 class="company-name">JPMorgan</h3>
+            <span class="company-sector">Finan\u00e7as</span>
+          </div>
+        </div>
+        <div class="company-body">
+          <div class="ba-row">
+            <div class="ba-before">
+              <span class="ba-label">ANTES</span>
+              <ul>
+                <li>32h/homem para analisar cada contrato de 100 p\u00e1ginas</li>
+                <li>70% dos trades executados por corretores humanos</li>
+                <li>Fraude detectada reativamente (ap\u00f3s ocorr\u00eancia)</li>
+                <li>Backlog de contratos pendentes por meses</li>
+              </ul>
+            </div>
+            <div class="ba-arrow">\u2192</div>
+            <div class="ba-after">
+              <span class="ba-label">DEPOIS</span>
+              <ul>
+                <li>COIN: 360.000 contratos/hora sem erro humano</li>
+                <li>75% dos trades s\u00e3o algor\u00edtmicos</li>
+                <li>Fraudes bloqueadas ANTES de completar em 92%</li>
+                <li>\u00cdndice de Sharpe melhora 25% vs \u00e9ra pr\u00e9-IA</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESLA -->
+      <div class="company-card reveal d4">
+        <div class="company-header">
+          <span class="company-logo">\u26a1</span>
+          <div>
+            <h3 class="company-name">Tesla</h3>
+            <span class="company-sector">Mobilidade</span>
+          </div>
+        </div>
+        <div class="company-body">
+          <div class="ba-row">
+            <div class="ba-before">
+              <span class="ba-label">ANTES</span>
+              <ul>
+                <li>Sem autonomy; apenas cruise control adaptativo</li>
+                <li>Toler\u00e2ncia de produ\u00e7\u00e3o: ~2mm</li>
+                <li>Taxa de defeitos: 15-20 por ve\u00edculo</li>
+                <li>Updates de software em oficina com cabo f\u00edsico</li>
+              </ul>
+            </div>
+            <div class="ba-arrow">\u2192</div>
+            <div class="ba-after">
+              <span class="ba-label">DEPOIS</span>
+              <ul>
+                <li>FSD opera em 95%+ das situa\u00e7\u00f5es sem interven\u00e7\u00e3o</li>
+                <li>Toler\u00e2ncia de 0.1mm com rob\u00f4s colaborativos</li>
+                <li>Defeitos: &lt;2 por ve\u00edculo</li>
+                <li>Novas features a cada 2-4 semanas via OTA</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JOHN DEERE -->
+      <div class="company-card reveal d5">
+        <div class="company-header">
+          <span class="company-logo">\u2618</span>
+          <div>
+            <h3 class="company-name">John Deere</h3>
+            <span class="company-sector">Agroneg\u00f3cio</span>
+          </div>
+        </div>
+        <div class="company-body">
+          <div class="ba-row">
+            <div class="ba-before">
+              <span class="ba-label">ANTES</span>
+              <ul>
+                <li>Defensivos aplicados em toda lavoura (desperd\u00edcio)</li>
+                <li>Decis\u00f5es de plantio por calend\u00e1rio e intui\u00e7\u00e3o</li>
+                <li>Manuten\u00e7\u00e3o preventiva por hor\u00e1metro, n\u00e3o por condi\u00e7\u00e3o</li>
+                <li>Tempo parado em campo: 8-15% da temporada</li>
+              </ul>
+            </div>
+            <div class="ba-arrow">\u2192</div>
+            <div class="ba-after">
+              <span class="ba-label">DEPOIS</span>
+              <ul>
+                <li>See &amp; Spray: 77% menos herbicida, precis\u00e3o semente a semente</li>
+                <li>Produtividade aumenta 15-25% por hectare</li>
+                <li>Falhas previstas 2-3 semanas antes de ocorrer</li>
+                <li>Tempo parado cai para &lt;2% da temporada</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NVIDIA -->
+      <div class="company-card reveal d6">
+        <div class="company-header">
+          <span class="company-logo">N</span>
+          <div>
+            <h3 class="company-name">NVIDIA</h3>
+            <span class="company-sector">Semicondutores</span>
+          </div>
+        </div>
+        <div class="company-body">
+          <div class="ba-row">
+            <div class="ba-before">
+              <span class="ba-label">ANTES</span>
+              <ul>
+                <li>75% da receita de GPUs para gaming</li>
+                <li>Data center era mercado secund\u00e1rio (&lt;15% receita)</li>
+                <li>Sem DRIVE platform \u2014 automotive irrelevante</li>
+                <li>CUDA usado apenas por acad\u00eamicos</li>
+              </ul>
+            </div>
+            <div class="ba-arrow">\u2192</div>
+            <div class="ba-after">
+              <span class="ba-label">DEPOIS</span>
+              <ul>
+                <li>~80% do mercado de AI training (H100/H200/GB200)</li>
+                <li>50% da receita de AI data center</li>
+                <li>DRIVE Thor: 2.000+ TOPS para autonomous vehicles</li>
+                <li>De 'empresa de chips' a 'empresa de infraestrutura IA'</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DUOLINGO -->
+      <div class="company-card reveal d1">
+        <div class="company-header">
+          <span class="company-logo">A</span>
+          <div>
+            <h3 class="company-name">Duolingo</h3>
+            <span class="company-sector">Educa\u00e7\u00e3o</span>
+          </div>
+        </div>
+        <div class="company-body">
+          <div class="ba-row">
+            <div class="ba-before">
+              <span class="ba-label">ANTES</span>
+              <ul>
+                <li>\u00c1rvore de li\u00e7\u00f5es fixa para todos</li>
+                <li>Corre\u00e7\u00e3o em batch sem explica\u00e7\u00e3o contextual</li>
+                <li>Abandono ap\u00f3s 7 dias: ~75%</li>
+                <li>Sem pr\u00e1tica conversacional real</li>
+              </ul>
+            </div>
+            <div class="ba-arrow">\u2192</div>
+            <div class="ba-after">
+              <span class="ba-label">DEPOIS</span>
+              <ul>
+                <li>ML personaliza rota de aprendizado em tempo real</li>
+                <li>AI tutor GPT-powered explica resposta na hora</li>
+                <li>Churn cai 17% com interven\u00e7\u00f5es preditivas</li>
+                <li>Conversa full-duplex 24/7 com AI language partner</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AIRBUS -->
+      <div class="company-card reveal d2">
+        <div class="company-header">
+          <span class="company-logo">\u2708</span>
+          <div>
+            <h3 class="company-name">Airbus</h3>
+            <span class="company-sector">Avia\u00e7\u00e3o</span>
+          </div>
+        </div>
+        <div class="company-body">
+          <div class="ba-row">
+            <div class="ba-before">
+              <span class="ba-label">ANTES</span>
+              <ul>
+                <li>CFD tradicional: valida\u00e7\u00e3o de design em semanas</li>
+                <li>Consumo de combust\u00edvel 8-12% acima do \u00f3timo</li>
+                <li>Falhas detectadas quando ocorriam (reativo)</li>
+                <li>Instala\u00e7\u00e3o de cabin 70% manual</li>
+              </ul>
+            </div>
+            <div class="ba-arrow">\u2192</div>
+            <div class="ba-after">
+              <span class="ba-label">DEPOIS</span>
+              <ul>
+                <li>Design generativo: itera\u00e7\u00e3o em dias vs semanas</li>
+                <li>Economia de combust\u00edvel 3-6% por voo ($200k/ano por A320)</li>
+                <li>Manuten\u00e7\u00e3o preditiva antecipa falhas 200+ horas antes</li>
+                <li>Instala\u00e7\u00e3o 40% mais r\u00e1pida com rob\u00f4s</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPOTIFY -->
+      <div class="company-card reveal d3">
+        <div class="company-header">
+          <span class="company-logo">\u266b</span>
+          <div>
+            <h3 class="company-name">Spotify</h3>
+            <span class="company-sector">Streaming de \u00e1udio</span>
+          </div>
+        </div>
+        <div class="company-body">
+          <div class="ba-row">
+            <div class="ba-before">
+              <span class="ba-label">ANTES</span>
+              <ul>
+                <li>Discover Weekly: collaborative filtering b\u00e1sico</li>
+                <li>\u00c1udiobooks e podcasts fora do radar</li>
+                <li>Busca por palavras-chave apenas</li>
+                <li>Wrapped b\u00e1sico com dados limitados</li>
+              </ul>
+            </div>
+            <div class="ba-arrow">\u2192</div>
+            <div class="ba-after">
+              <span class="ba-label">DEPOIS</span>
+              <ul>
+                <li>100+ modelos de ML em produ\u00e7\u00e3o por usu\u00e1rio</li>
+                <li>AI DJ com voz clonada e coment\u00e1rios personalizados</li>
+                <li>Busca sem\u00e2ntica: "m\u00fasica pra dirigir ao p\u00f4r do sol"</li>
+                <li>Wrapped: 6.000+ data points por ano processados por ML</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOVO NORDISK -->
+      <div class="company-card reveal d4">
+        <div class="company-header">
+          <span class="company-logo">NN</span>
+          <div>
+            <h3 class="company-name">Novo Nordisk</h3>
+            <span class="company-sector">Farmac\u00eautica</span>
+          </div>
+        </div>
+        <div class="company-body">
+          <div class="ba-row">
+            <div class="ba-before">
+              <span class="ba-label">ANTES</span>
+              <ul>
+                <li>Drug discovery: 8-12 anos, $2.3 bilh\u00f5es por droga</li>
+                <li>Sele\u00e7\u00e3o de pacientes para ensaios 100% manual</li>
+                <li>Lotes recusados por varia\u00e7\u00e3o de 5-8% em dosage</li>
+                <li>Field force visitando m\u00e9dicos um a um</li>
+              </ul>
+            </div>
+            <div class="ba-arrow">\u2192</div>
+            <div class="ba-after">
+              <span class="ba-label">DEPOIS</span>
+              <ul>
+                <li>IA generativa: identifica lead compound em meses vs anos</li>
+                <li>Ensaio fase III: 2-2.5 anos vs 3-4 anos</li>
+                <li>Precis\u00e3o de dosage &lt;0.5% de varia\u00e7\u00e3o</li>
+                <li>Insights personalizados por m\u00e9dico via ML</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
-
-  <!-- DATA CARD (slides in from right) -->
-  <div class="data-card" id="dataCard">
-    <button class="data-card-close" id="closeDataCard">&times;</button>
-    <div class="data-card-header">
-      <span class="data-card-flag" id="cardFlag">🇺🇸</span>
-      <div>
-        <div class="data-card-name" id="cardName">United States</div>
-        <div class="data-card-sector" id="cardSector">Tech & Research</div>
-      </div>
-    </div>
-    <div class="data-card-stats">
-      <div class="data-card-stat">
-        <div class="data-card-stat-label" data-pt="Adoção de IA" data-en="AI Adoption">Empresas usando IA</div>
-        <div class="data-card-stat-value" id="cardAdoption">78%</div>
-      </div>
-      <div class="data-card-stat">
-        <div class="data-card-stat-label" data-pt="Tamanho do mercado" data-en="Market Size">Mercado de IA</div>
-        <div class="data-card-stat-value" id="cardMarket">$500B+</div>
-      </div>
-    </div>
-  </div>
 
   <!-- SERVICES -->
   <section id="services">
