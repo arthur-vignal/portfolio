@@ -1103,8 +1103,8 @@
     <canvas id="particlesCanvas"></canvas>
     <canvas id="gridCanvas"></canvas>
 
-    <!-- Left half: Globe -->
-    <div class="hero-globe-side">
+    <!-- Left half: Globe (hidden - user will replace) -->
+    <div class="hero-globe-side" style="display:none">
       <canvas id="heroGlobeCanvas"></canvas>
     </div>
 
@@ -1751,27 +1751,6 @@
       const atmosphere = new THREE.Mesh(atmosGeo, atmosMat);
       heroScene.add(atmosphere);
 
-      // Dot markers floating around globe
-      const dotMeshes = [];
-      const dotPositions = [
-        [1.3, 0.5, 0.3], [1.4, -0.3, 0.5], [0.8, 0.8, 0.9],
-        [1.1, 0.2, 1.0], [0.6, 1.1, 0.4], [1.2, 0.9, -0.2],
-        [-0.3, 1.3, 0.8], [0.4, 0.3, 1.4], [1.0, -0.6, 0.7],
-        [0.7, 1.0, -0.5], [-0.5, 0.7, 1.1], [0.2, 1.2, 0.6]
-      ];
-      dotPositions.forEach((pos) => {
-        const dotGeo = new THREE.SphereGeometry(0.03, 8, 8);
-        const dotMat = new THREE.MeshBasicMaterial({
-          color: 0xF5D000,
-          transparent: true,
-          opacity: 0.9,
-        });
-        const dot = new THREE.Mesh(dotGeo, dotMat);
-        dot.position.set(pos[0], pos[1], pos[2]);
-        heroScene.add(dot);
-        dotMeshes.push(dot);
-      });
-
       const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
       heroScene.add(ambientLight);
       const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
@@ -2119,15 +2098,8 @@
     countryData.forEach((country, i) => {
       const pos = latLngToVec3(country.lat, country.lng, 1.025);
 
-      // Outer glow ring
+      // Outer glow ring (removed - no yellow rings)
       const ringGeo = new THREE.RingGeometry(0.022, 0.032, 16);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: 0xF5D000, side: THREE.DoubleSide, transparent: true, opacity: 0.5,
-      });
-      const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.position.copy(pos);
-      ring.lookAt(new THREE.Vector3(0, 0, 0));
-      markerGroup.add(ring);
 
       // Core dot
       const markerGeo = new THREE.SphereGeometry(0.025, 8, 8);
