@@ -1716,49 +1716,24 @@
       const size = heroGlobeSize();
       heroRenderer.setSize(size, size);
 
+      // Main sphere - dark with subtle gradient
       const earthGeo = new THREE.SphereGeometry(1, 64, 64);
-      const textureLoader = new THREE.TextureLoader();
       const earthMat = new THREE.MeshPhongMaterial({
-        map: textureLoader.load('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'),
-        bumpMap: textureLoader.load('https://unpkg.com/three-globe/example/img/earth-topology.png'),
-        bumpScale: 0.04,
-        specular: new THREE.Color(0x111111),
-        shininess: 5,
+        color: 0x0a1a2f,
+        emissive: 0x050d18,
+        specular: 0x111133,
+        shininess: 10,
       });
       const earth = new THREE.Mesh(earthGeo, earthMat);
       heroScene.add(earth);
 
-      const atmoGeo = new THREE.SphereGeometry(1.15, 64, 64);
-      const atmoMat = new THREE.ShaderMaterial({
-        uniforms: { glowColor: { value: new THREE.Color(0x3a8fff) } },
-        vertexShader: `
-          varying vec3 vNormal;
-          void main() {
-            vNormal = normalize(normalMatrix * normal);
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `,
-        fragmentShader: `
-          varying vec3 vNormal;
-          uniform vec3 glowColor;
-          void main() {
-            float intensity = pow(0.6 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.5);
-            gl_FragColor = vec4(glowColor, intensity * 0.5);
-          }
-        `,
-        side: THREE.BackSide,
-        blending: THREE.AdditiveBlending,
-        transparent: true,
-      });
-      const atmosphere = new THREE.Mesh(atmoGeo, atmoMat);
-      heroScene.add(atmosphere);
-
-      const wireGeo = new THREE.SphereGeometry(1.01, 32, 32);
+      // Bright wireframe grid
+      const wireGeo = new THREE.SphereGeometry(1.005, 40, 40);
       const wireMat = new THREE.MeshBasicMaterial({
         color: 0xF5D000,
         wireframe: true,
         transparent: true,
-        opacity: 0.03,
+        opacity: 0.08,
       });
       const wireframe = new THREE.Mesh(wireGeo, wireMat);
       heroScene.add(wireframe);
@@ -2030,49 +2005,21 @@
     const iCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
     iCamera.position.z = 3;
 
-    // Earth
+    // Earth - self-contained material, no external textures
     const iEarthGeo = new THREE.SphereGeometry(1, 64, 64);
-    const iTextureLoader = new THREE.TextureLoader();
     const iEarthMat = new THREE.MeshPhongMaterial({
-      map: iTextureLoader.load('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'),
-      bumpMap: iTextureLoader.load('https://unpkg.com/three-globe/example/img/earth-topology.png'),
-      bumpScale: 0.04,
-      specular: new THREE.Color(0x111111),
-      shininess: 5,
+      color: 0x0a1a2f,
+      emissive: 0x050d18,
+      specular: 0x111133,
+      shininess: 10,
     });
     const iEarth = new THREE.Mesh(iEarthGeo, iEarthMat);
     iScene.add(iEarth);
 
-    // Atmosphere
-    const iAtmoGeo = new THREE.SphereGeometry(1.15, 64, 64);
-    const iAtmoMat = new THREE.ShaderMaterial({
-      uniforms: { glowColor: { value: new THREE.Color(0x3a8fff) } },
-      vertexShader: `
-        varying vec3 vNormal;
-        void main() {
-          vNormal = normalize(normalMatrix * normal);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        varying vec3 vNormal;
-        uniform vec3 glowColor;
-        void main() {
-          float intensity = pow(0.6 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.5);
-          gl_FragColor = vec4(glowColor, intensity * 0.5);
-        }
-      `,
-      side: THREE.BackSide,
-      blending: THREE.AdditiveBlending,
-      transparent: true,
-    });
-    const iAtmosphere = new THREE.Mesh(iAtmoGeo, iAtmoMat);
-    iScene.add(iAtmosphere);
-
     // Wireframe
-    const iWireGeo = new THREE.SphereGeometry(1.01, 32, 32);
+    const iWireGeo = new THREE.SphereGeometry(1.005, 40, 40);
     const iWireMat = new THREE.MeshBasicMaterial({
-      color: 0xF5D000, wireframe: true, transparent: true, opacity: 0.03,
+      color: 0xF5D000, wireframe: true, transparent: true, opacity: 0.08,
     });
     const iWireframe = new THREE.Mesh(iWireGeo, iWireMat);
     iScene.add(iWireframe);
