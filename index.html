@@ -1740,24 +1740,13 @@
 
       heroScene.add(earth);
 
-      // Bright wireframe grid
-      const wireGeo = new THREE.SphereGeometry(1.01, 40, 40);
-      const wireMat = new THREE.MeshBasicMaterial({
-        color: 0x00ff88,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.25,
-      });
-      const wireframe = new THREE.Mesh(wireGeo, wireMat);
-      heroScene.add(wireframe);
-
-      // Atmosphere glow shell - cyan rim
-      const atmosGeo = new THREE.SphereGeometry(1.08, 32, 32);
+      // Atmosphere glow shell - cyan rim (subtle)
+      const atmosGeo = new THREE.SphereGeometry(1.03, 32, 32);
       const atmosMat = new THREE.MeshBasicMaterial({
-        color: 0x00eeff,
-        wireframe: true,
+        color: 0x1a4a6e,
+        wireframe: false,
         transparent: true,
-        opacity: 0.15,
+        opacity: 0.12,
       });
       const atmosphere = new THREE.Mesh(atmosGeo, atmosMat);
       heroScene.add(atmosphere);
@@ -1836,9 +1825,7 @@
       document.addEventListener('mouseup', () => { heroIsDragging = false; });
 
       function animate() {
-        globePhase += 0.003;
         earth.rotation.y += 0.002;
-        wireframe.rotation.y += 0.002;
         atmosphere.rotation.y += 0.001;
 
         currentRotX += (targetRotX - currentRotX) * 0.05;
@@ -1847,14 +1834,6 @@
         earth.rotation.z += (currentRotY - earth.rotation.z) * 0.05;
         atmosphere.rotation.x = earth.rotation.x;
         atmosphere.rotation.z = earth.rotation.z;
-        wireframe.rotation.x = earth.rotation.x;
-        wireframe.rotation.z = earth.rotation.z;
-
-        dotMeshes.forEach((dot, i) => {
-          const s = 0.8 + 0.4 * Math.sin(globePhase * 2 + i * 0.8);
-          dot.material.opacity = s;
-          dot.scale.setScalar(s);
-        });
 
         heroRenderer.render(heroScene, heroCamera);
         requestAnimationFrame(animate);
@@ -2102,21 +2081,13 @@
 
     iScene.add(iEarth);
 
-    // Wireframe
-    const iWireGeo = new THREE.SphereGeometry(1.01, 40, 40);
-    const iWireMat = new THREE.MeshBasicMaterial({
-      color: 0x00ff88, wireframe: true, transparent: true, opacity: 0.5,
-    });
-    const iWireframe = new THREE.Mesh(iWireGeo, iWireMat);
-    iScene.add(iWireframe);
-
-    // Atmosphere glow shell for interactive globe
-    const iAtmosGeo = new THREE.SphereGeometry(1.08, 32, 32);
+    // Atmosphere shell for interactive globe (very subtle, no wireframe)
+    const iAtmosGeo = new THREE.SphereGeometry(1.03, 32, 32);
     const iAtmosMat = new THREE.MeshBasicMaterial({
-      color: 0x00eeff,
-      wireframe: true,
+      color: 0x1a4a6e,
+      wireframe: false,
       transparent: true,
-      opacity: 0.15,
+      opacity: 0.12,
     });
     const iAtmosphere = new THREE.Mesh(iAtmosGeo, iAtmosMat);
     iScene.add(iAtmosphere);
@@ -2236,18 +2207,21 @@
 
     iGlobeCanvas.addEventListener('mouseleave', hideDataCard);
 
-    // Auto-rotate for interactive globe
+    // Auto-rotate for interactive globe (only when not stopped by user)
     let iTargetRotY = 0;
     let iCurrentRotY = 0;
-    let iGlobePhase = 0;
     let autoRotate = true;
     let autoRotateTimer = null;
 
     function resetAutoRotate() {
       autoRotate = false;
       clearTimeout(autoRotateTimer);
-      autoRotateTimer = setTimeout(() => { autoRotate = true; }, 3000);
     }
+
+    function resumeAutoRotate() {
+      autoRotate = true;
+    }
+    window.resumeGlobeRotation = resumeAutoRotate; // expose for UI call
 
     // Drag rotation for interactive globe
     let iIsDragging = false;
@@ -2281,13 +2255,8 @@
     });
 
     function animateIGlobe() {
-      iGlobePhase += 0.003;
-
       iEarth.rotation.y += 0.001;
-      iWireframe.rotation.y += 0.001;
       iAtmosphere.rotation.y += 0.0005;
-      iWireframe.rotation.x = iEarth.rotation.x;
-      iWireframe.rotation.z = iEarth.rotation.z;
       iAtmosphere.rotation.x = iEarth.rotation.x;
       iAtmosphere.rotation.z = iEarth.rotation.z;
       markerGroup.rotation.y = iEarth.rotation.y;
@@ -2304,18 +2273,12 @@
         // Slow auto-rotate Y
         iCurrentRotY += 0.0008;
         iEarth.rotation.y = iCurrentRotY;
-        iEarth.rotation.x = iDragRotX; // keep drag X but auto Y
+        iEarth.rotation.x = iDragRotX;
         markerGroup.rotation.y = iCurrentRotY;
         markerGroup.rotation.x = iDragRotX;
       }
 
-      // Pulse markers
-      markerMeshes.forEach((m, i) => {
-        const s = 0.7 + 0.3 * Math.sin(iGlobePhase * 2 + i * 0.5);
-        m.scale.setScalar(s);
-        m.material.opacity = s;
-      });
-
+      // Markers stay static (no pulse)
       iRenderer.render(iScene, iCamera);
       requestAnimationFrame(animateIGlobe);
     }
