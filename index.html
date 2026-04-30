@@ -2255,30 +2255,35 @@
     });
 
     function animateIGlobe() {
-      iEarth.rotation.y += 0.001;
-      iAtmosphere.rotation.y += 0.0005;
-      iAtmosphere.rotation.x = iEarth.rotation.x;
-      iAtmosphere.rotation.z = iEarth.rotation.z;
-      markerGroup.rotation.y = iEarth.rotation.y;
-      markerGroup.rotation.x = iEarth.rotation.x;
-      markerGroup.rotation.z = iEarth.rotation.z;
+      // PAUSE: when autoRotate is false and not dragging, globe stays still
+      if (!autoRotate && !iIsDragging) {
+        iRenderer.render(iScene, iCamera);
+        requestAnimationFrame(animateIGlobe);
+        return;
+      }
 
-      // Apply drag rotation when not auto-rotating
+      // DRAG mode: user manually rotated
       if (!autoRotate && iIsDragging) {
         iEarth.rotation.y = iDragRotY;
         iEarth.rotation.x = iDragRotX;
         markerGroup.rotation.y = iDragRotY;
         markerGroup.rotation.x = iDragRotX;
-      } else if (autoRotate) {
-        // Slow auto-rotate Y
+        iAtmosphere.rotation.y = iDragRotY;
+        iAtmosphere.rotation.x = iDragRotX;
+        iAtmosphere.rotation.z = iDragRotX;
+      }
+      // AUTO-ROTATE mode
+      else if (autoRotate) {
         iCurrentRotY += 0.0008;
         iEarth.rotation.y = iCurrentRotY;
         iEarth.rotation.x = iDragRotX;
         markerGroup.rotation.y = iCurrentRotY;
         markerGroup.rotation.x = iDragRotX;
+        iAtmosphere.rotation.y = iCurrentRotY;
+        iAtmosphere.rotation.x = iDragRotX;
+        iAtmosphere.rotation.z = iDragRotX;
       }
 
-      // Markers stay static (no pulse)
       iRenderer.render(iScene, iCamera);
       requestAnimationFrame(animateIGlobe);
     }
