@@ -146,10 +146,8 @@
     /* ── HERO ── */
     .hero {
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       position: relative;
       overflow: hidden;
     }
@@ -157,12 +155,7 @@
     #gridCanvas {
       position: absolute; inset: 0;
       width: 100%; height: 100%;
-    }
-    #globeCanvas {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 1;
+      z-index: 0;
     }
     #particlesCanvas {
       position: absolute; inset: 0;
@@ -170,38 +163,52 @@
       z-index: 0;
     }
 
-    .hero-content {
+    /* Globe side (left) */
+    .hero-globe-side {
       position: relative;
-      z-index: 2;
-      text-align: center;
-      margin-top: 60px;
-      opacity: 0;
-      animation: fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) 0.8s forwards;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
     }
-    .hero-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--yellow);
-      letter-spacing: 0.5em;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-      opacity: 0.7;
+    #heroGlobeCanvas {
+      position: absolute;
+      z-index: 1;
     }
-    .hero-title {
-      font-size: clamp(32px, 5vw, 64px);
+
+    /* Text side (right) */
+    .hero-text-side {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 60px 0 20px;
+    }
+    .hero-kibo-title {
+      font-size: clamp(72px, 9vw, 120px);
       font-weight: 900;
-      letter-spacing: -0.03em;
-      line-height: 1.05;
-      margin-bottom: 20px;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      color: var(--text);
+      margin-bottom: 8px;
     }
-    .hero-title .accent { color: var(--yellow); }
+    .hero-kibo-title .accent { color: var(--yellow); }
+    .hero-solutions {
+      font-size: clamp(22px, 3vw, 36px);
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 32px;
+      font-family: 'JetBrains Mono', monospace;
+    }
     .hero-sub {
-      font-size: clamp(14px, 2vw, 18px);
+      font-size: clamp(13px, 1.5vw, 16px);
       color: var(--text-soft);
       font-weight: 300;
-      max-width: 520px;
-      margin: 0 auto;
-      line-height: 1.7;
+      max-width: 420px;
+      line-height: 1.8;
     }
 
     .hero-scroll {
@@ -327,6 +334,160 @@
     }
     .marquee-item::after { content: '//'; color: var(--yellow); opacity: 0.3; margin-left: 40px; }
     @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* ── INTERACTIVE GLOBE SECTION ── */
+    #interactive-globe {
+      padding: 120px 48px;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .iglobe-bg-glow {
+      position: absolute;
+      top: 50%; left: 40%;
+      transform: translate(-50%, -50%);
+      width: 800px; height: 600px;
+      background: radial-gradient(ellipse, rgba(245,208,0,0.03) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .iglobe-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .iglobe-globe-col {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    #interactiveGlobeCanvas {
+      cursor: pointer;
+    }
+    .iglobe-text-col {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .iglobe-headline {
+      font-size: clamp(22px, 3vw, 34px);
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text);
+    }
+    .iglobe-headline .accent { color: var(--yellow); }
+    .iglobe-sub {
+      font-size: 14px;
+      color: var(--text-soft);
+      line-height: 1.8;
+      max-width: 440px;
+    }
+    .iglobe-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      border-radius: 12px;
+      border: 1px solid rgba(245,208,0,0.3);
+      background: var(--yellow-dim);
+      color: var(--yellow);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+      cursor: pointer;
+      width: fit-content;
+    }
+    .iglobe-cta:hover {
+      background: var(--yellow);
+      color: #000;
+      border-color: var(--yellow);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(245,208,0,0.2);
+    }
+    .iglobe-cta svg { transition: transform 0.3s; }
+    .iglobe-cta:hover svg { transform: translateX(4px); }
+
+    /* Data card */
+    .data-card {
+      position: fixed;
+      z-index: 500;
+      width: 280px;
+      background: rgba(5,5,5,0.95);
+      border: 1px solid rgba(245,208,0,0.2);
+      border-radius: 16px;
+      padding: 24px;
+      pointer-events: none;
+      opacity: 0;
+      transform: scale(0.9) translateY(10px);
+      transition: opacity 0.3s, transform 0.3s cubic-bezier(0.16,1,0.3,1);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(245,208,0,0.06);
+    }
+    .data-card.visible {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    .data-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .data-card-flag {
+      font-size: 28px;
+      line-height: 1;
+    }
+    .data-card-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .data-card-sector {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: var(--yellow);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .data-card-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .data-card-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .data-card-stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .data-card-stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--yellow);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .data-card-stat-value .small {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-soft);
+    }
 
     /* ── SERVICES ── */
     #services { background: var(--bg-2); }
@@ -881,11 +1042,18 @@
       .stats-grid { grid-template-columns: 1fr 1fr; }
       .tech-categories { grid-template-columns: 1fr 1fr; }
       .estudos-grid { grid-template-columns: 1fr 1fr; }
+      .iglobe-layout { grid-template-columns: 1fr; gap: 40px; }
+      .iglobe-globe-col { order: 1; }
+      .iglobe-text-col { order: 2; }
     }
     @media (max-width: 768px) {
       nav { padding: 0 24px; }
       section { padding: 80px 24px; }
       .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-globe-side { min-height: 50vh; }
+      .hero-text-side { padding: 0 24px 40px; justify-content: flex-start; padding-top: 40px; }
+      .hero-kibo-title { font-size: clamp(60px, 15vw, 100px); }
       .services-grid { grid-template-columns: 1fr; }
       .methodology-steps { grid-template-columns: 1fr; gap: 40px; }
       .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -899,6 +1067,9 @@
       .values-grid { grid-template-columns: 1fr; }
       .estudos-grid { grid-template-columns: 1fr; }
       .lang-switcher { padding: 5px 8px; font-size: 9px; }
+      #interactive-globe { padding: 80px 24px; }
+      .iglobe-layout { grid-template-columns: 1fr; }
+      .iglobe-globe-col canvas { width: 320px !important; height: 320px !important; }
     }
   </style>
 </head>
@@ -931,19 +1102,23 @@
   <section class="hero" id="hero">
     <canvas id="particlesCanvas"></canvas>
     <canvas id="gridCanvas"></canvas>
-    <canvas id="globeCanvas"></canvas>
 
-    <div class="hero-content">
-      <div class="hero-label" data-pt="Empresa Brasileira de IA" data-en="Brazilian AI Company">Empresa Brasileira de IA</div>
-      <h1 class="hero-title">
-        <span data-pt="Inteligência" data-en="Intelligence"><span data-pt="Inteligência" data-en="Intelligence">Inteligência</span></span><br>
-        <span class="accent" data-pt="em Escala" data-en="at Scale">em Escala</span>
+    <!-- Left half: Globe -->
+    <div class="hero-globe-side">
+      <canvas id="heroGlobeCanvas"></canvas>
+    </div>
+
+    <!-- Right half: Text -->
+    <div class="hero-text-side">
+      <h1 class="hero-kibo-title">
+        <span class="accent">KIBO</span>
       </h1>
+      <div class="hero-solutions" data-pt="Solutions" data-en="Solutions">Solutions</div>
       <p class="hero-sub" data-pt="Construímos produtos de IA do zero e aplicamos inteligência em negócios existentes — trazendo precisão, inovação e impacto mensurável." data-en="We build AI products from scratch and apply intelligence to existing businesses — bringing precision, innovation, and measurable impact.">Construímos produtos de IA do zero e aplicamos inteligência em negócios existentes — trazendo precisão, inovação e impacto mensurável.</p>
     </div>
 
     <div class="hero-scroll">
-      <span data-pt="Role" data-en="Scroll">Role</span>
+      <span data-pt="Role" data-en="Scroll">Scroll</span>
       <div class="scroll-line"></div>
     </div>
 
@@ -976,6 +1151,51 @@
       <span class="marquee-item">Three.js</span>
       <span class="marquee-item">PyTorch</span>
       <span class="marquee-item">LangChain</span>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE GLOBE -->
+  <section id="interactive-globe">
+    <div class="iglobe-bg-glow"></div>
+    <div class="section-label reveal" data-pt="// Explorar" data-en="// Explore">// Explorar</div>
+    <div class="iglobe-layout">
+      <div class="iglobe-globe-col">
+        <canvas id="interactiveGlobeCanvas"></canvas>
+      </div>
+      <div class="iglobe-text-col">
+        <h2 class="iglobe-headline reveal d1">
+          <span data-pt="As principais empresas do mundo usam IA." data-en="The world's leading companies are using AI.">As principais empresas do mundo usam IA.</span><br>
+          <span class="accent" data-pt="Tá esperando o quê?" data-en="What's holding you back?">Tá esperando o quê?</span>
+        </h2>
+        <p class="iglobe-sub reveal d2" data-pt="Explore os dados de adoção de IA ao redor do mundo. Cada ponto no globo representa um país que já está transformando sua economia com inteligência artificial — e o mercado só cresce." data-en="Explore AI adoption data from around the world. Each point on the globe represents a country already transforming its economy with artificial intelligence — and the market is only growing.">Explore os dados de adoção de IA ao redor do mundo. Cada ponto no globo representa um país que já está transformando sua economia com inteligência artificial — e o mercado só cresce.</p>
+        <a href="#services" class="iglobe-cta reveal d3">
+          <span data-pt="Veja o que oferecemos" data-en="See what we offer">Veja o que oferecemos</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATA CARD (floating) -->
+  <div class="data-card" id="dataCard">
+    <div class="data-card-header">
+      <span class="data-card-flag" id="cardFlag">🇺🇸</span>
+      <div>
+        <div class="data-card-name" id="cardName">United States</div>
+        <div class="data-card-sector" id="cardSector">Tech & Research</div>
+      </div>
+    </div>
+    <div class="data-card-stats">
+      <div class="data-card-stat">
+        <div class="data-card-stat-label" data-pt="Empresas usando IA" data-en="Companies Using AI">Empresas usando IA</div>
+        <div class="data-card-stat-value" id="cardAdoption">78%</div>
+      </div>
+      <div class="data-card-stat">
+        <div class="data-card-stat-label" data-pt="Mercado de IA" data-en="AI Market Size">Mercado de IA</div>
+        <div class="data-card-stat-value" id="cardMarket">$500B+</div>
+      </div>
     </div>
   </div>
 
@@ -1053,7 +1273,7 @@
       </div>
 
       <div class="project-card reveal d2" data-tilt>
-        <span class="card-label" data-pt="02 — Assistente de IA" data-en="02 — AI Assistant">02 — Assistente de IA</span>
+        <span class="card-label" data-pt="02 — Assistente de IA" data-en="02 — AI Assistant">02 — AI Assistant</span>
         <h3>ARIA</h3>
         <p data-pt="Um assistente inteligente de radiologia integrado ao RadioeXperience. A ARIA responde perguntas clínicas, analisa imagens médicas e sugere diagnósticos baseados em evidências — ampliando o fluxo do radiologista sem substituir seu julgamento." data-en="An intelligent radiology assistant integrated into RadioeXperience. ARIA answers clinical questions, analyzes medical images, and suggests evidence-based diagnoses — augmenting the radiologist's workflow without replacing judgment.">Um assistente inteligente de radiologia integrado ao RadioeXperience. A ARIA responde perguntas clínicas, analisa imagens médicas e sugere diagnósticos baseados em evidências — ampliando o fluxo do radiologista sem substituir seu julgamento.</p>
         <div class="stack-row">
@@ -1141,7 +1361,7 @@
       <div class="estudo-card reveal d4">
         <div class="estudo-stat counter" data-target="73" data-suffix="%">0</div>
         <h3 data-pt="Expectativa do Consumidor" data-en="Consumer Expectation">Expectativa do Consumidor</h3>
-        <p class="finding" data-pt="73% dos consumidores esperam interações com IA em algum momento da jornada. Empresas que usam IA têm NPS 20-30 pontos mais alto." data-en="73% of consumers expect AI interactions at some point in their journey. Companies using AI have NPS scores 20-30 points higher.">73% dos consumidores esperam interações com IA em algum momento da jornada. Empresas que usam IA têm NPS 20-30 pontos mais alto.</p>
+        <p class="finding" data-pt="73% dos consumidores esperam interações com IA em algum ponto da jornada. Empresas que usam IA têm NPS 20-30 pontos mais alto." data-en="73% of consumers expect AI interactions at some point in their journey. Companies using AI have NPS scores 20-30 points higher.">73% dos consumidores esperam interações com IA em algum ponto da jornada. Empresas que usam IA têm NPS 20-30 pontos mais alto.</p>
         <div class="estudo-source">
           <span>Salesforce, 2023</span><br>
           "State of the Connected Customer"<br>
@@ -1362,21 +1582,16 @@
       localStorage.setItem(STORAGE_KEY, lang);
       document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
 
-      // Update lang switcher UI
       document.getElementById('langLabel').textContent = lang === 'pt' ? 'PT' : 'EN';
       document.getElementById('langAlt').textContent = lang === 'pt' ? 'EN' : 'PT';
       document.getElementById('langLabel').classList.toggle('lang-active', true);
       document.getElementById('langAlt').classList.remove('lang-active');
 
-      // Update all translatable elements
       document.querySelectorAll('[data-pt][data-en]').forEach(el => {
         const text = el.getAttribute(`data-${lang}`);
-        if (text !== null) {
-          el.innerHTML = text;
-        }
+        if (text !== null) el.innerHTML = text;
       });
 
-      // Re-trigger counter animations for estudo stats
       initCounters(true);
     }
 
@@ -1406,8 +1621,7 @@
     }
     animateCursor();
 
-    const hoverEls = document.querySelectorAll('a, button, .project-card, .service-card, .team-card');
-    hoverEls.forEach(el => {
+    document.querySelectorAll('a, button, .project-card, .service-card, .team-card').forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
@@ -1432,7 +1646,7 @@
     reveals.forEach(el => revealObserver.observe(el));
 
     // ═══════════════════════════════════════════════
-    // NUMBER COUNTER (standard + decimal)
+    // NUMBER COUNTER
     // ═══════════════════════════════════════════════
     let countersAnimated = false;
 
@@ -1481,31 +1695,390 @@
     initCounters(false);
 
     // ═══════════════════════════════════════════════
-    // THREE.JS GLOBE
+    // HERO GLOBE (Three.js)
     // ═══════════════════════════════════════════════
-    const globeCanvas = document.getElementById('globeCanvas');
-    const renderer = new THREE.WebGLRenderer({ canvas: globeCanvas, alpha: true, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(480, 480);
+    const heroGlobeCanvas = document.getElementById('heroGlobeCanvas');
+    const heroRenderer = new THREE.WebGLRenderer({ canvas: heroGlobeCanvas, alpha: true, antialias: true });
+    heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-    camera.position.z = 3;
+    const heroScene = new THREE.Scene();
+    const heroCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+    heroCamera.position.z = 3;
 
-    const earthGeo = new THREE.SphereGeometry(1, 64, 64);
-    const textureLoader = new THREE.TextureLoader();
-    const earthMat = new THREE.MeshPhongMaterial({
-      map: textureLoader.load('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'),
-      bumpMap: textureLoader.load('https://unpkg.com/three-globe/example/img/earth-topology.png'),
+    const heroGlobeSize = () => {
+      const vw = window.innerWidth;
+      if (vw >= 1024) return 520;
+      if (vw >= 768) return 380;
+      return 300;
+    };
+
+    function initHeroGlobe() {
+      const size = heroGlobeSize();
+      heroRenderer.setSize(size, size);
+
+      const earthGeo = new THREE.SphereGeometry(1, 64, 64);
+      const textureLoader = new THREE.TextureLoader();
+      const earthMat = new THREE.MeshPhongMaterial({
+        map: textureLoader.load('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'),
+        bumpMap: textureLoader.load('https://unpkg.com/three-globe/example/img/earth-topology.png'),
+        bumpScale: 0.04,
+        specular: new THREE.Color(0x111111),
+        shininess: 5,
+      });
+      const earth = new THREE.Mesh(earthGeo, earthMat);
+      heroScene.add(earth);
+
+      const atmoGeo = new THREE.SphereGeometry(1.15, 64, 64);
+      const atmoMat = new THREE.ShaderMaterial({
+        uniforms: { glowColor: { value: new THREE.Color(0x3a8fff) } },
+        vertexShader: `
+          varying vec3 vNormal;
+          void main() {
+            vNormal = normalize(normalMatrix * normal);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          varying vec3 vNormal;
+          uniform vec3 glowColor;
+          void main() {
+            float intensity = pow(0.6 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.5);
+            gl_FragColor = vec4(glowColor, intensity * 0.5);
+          }
+        `,
+        side: THREE.BackSide,
+        blending: THREE.AdditiveBlending,
+        transparent: true,
+      });
+      const atmosphere = new THREE.Mesh(atmoGeo, atmoMat);
+      heroScene.add(atmosphere);
+
+      const wireGeo = new THREE.SphereGeometry(1.01, 32, 32);
+      const wireMat = new THREE.MeshBasicMaterial({
+        color: 0xF5D000,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.03,
+      });
+      const wireframe = new THREE.Mesh(wireGeo, wireMat);
+      heroScene.add(wireframe);
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+      heroScene.add(ambientLight);
+      const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+      dirLight.position.set(5, 3, 5);
+      heroScene.add(dirLight);
+      const pointLight = new THREE.PointLight(0x3a8fff, 0.5, 10);
+      pointLight.position.set(-3, -2, 3);
+      heroScene.add(pointLight);
+
+      // City dots for hero globe
+      const cityData = [
+        { lat: -23.55, lng: -46.63 },
+        { lat: 40.71, lng: -74.01 },
+        { lat: 51.51, lng: -0.13 },
+        { lat: 35.68, lng: 139.69 },
+        { lat: -33.87, lng: 151.21 },
+        { lat: 19.08, lng: 72.88 },
+        { lat: 55.75, lng: 37.62 },
+        { lat: -23.36, lng: -46.63 },
+      ];
+
+      function latLngToVec3(lat, lng, radius) {
+        const phi = (90 - lat) * (Math.PI / 180);
+        const theta = (lng + 180) * (Math.PI / 180);
+        return new THREE.Vector3(
+          -radius * Math.sin(phi) * Math.cos(theta),
+          radius * Math.cos(phi),
+          radius * Math.sin(phi) * Math.sin(theta)
+        );
+      }
+
+      const dotGeo = new THREE.SphereGeometry(0.015, 8, 8);
+      const dotMat = new THREE.MeshBasicMaterial({ color: 0xF5D000 });
+      const dotMeshes = [];
+      cityData.forEach(city => {
+        const dot = new THREE.Mesh(dotGeo, dotMat.clone());
+        const pos = latLngToVec3(city.lat, city.lng, 1.02);
+        dot.position.copy(pos);
+        dotMeshes.push(dot);
+        heroScene.add(dot);
+      });
+
+      let targetRotX = 0, targetRotY = 0;
+      let currentRotX = 0, currentRotY = 0;
+      let globePhase = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        const rect = heroGlobeCanvas.getBoundingClientRect();
+        if (e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom) {
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          targetRotY = ((e.clientX - cx) / rect.width) * 0.4;
+          targetRotX = ((e.clientY - cy) / rect.height) * 0.3;
+        }
+      });
+
+      function animate() {
+        globePhase += 0.003;
+        earth.rotation.y += 0.002;
+        wireframe.rotation.y += 0.002;
+        atmosphere.rotation.y += 0.001;
+
+        currentRotX += (targetRotX - currentRotX) * 0.05;
+        currentRotY += (targetRotY - currentRotY) * 0.05;
+        earth.rotation.x += (currentRotX - earth.rotation.x) * 0.05;
+        earth.rotation.z += (currentRotY - earth.rotation.z) * 0.05;
+        atmosphere.rotation.x = earth.rotation.x;
+        atmosphere.rotation.z = earth.rotation.z;
+        wireframe.rotation.x = earth.rotation.x;
+        wireframe.rotation.z = earth.rotation.z;
+
+        dotMeshes.forEach((dot, i) => {
+          const s = 0.8 + 0.4 * Math.sin(globePhase * 2 + i * 0.8);
+          dot.material.opacity = s;
+          dot.scale.setScalar(s);
+        });
+
+        heroRenderer.render(heroScene, heroCamera);
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+
+      window.addEventListener('resize', () => {
+        const size = heroGlobeSize();
+        heroRenderer.setSize(size, size);
+        heroCamera.aspect = 1;
+        heroCamera.updateProjectionMatrix();
+      });
+    }
+
+    initHeroGlobe();
+
+    // ═══════════════════════════════════════════════
+    // INTERACTIVE GLOBE (Three.js)
+    // ═══════════════════════════════════════════════
+
+    // 20+ countries AI data
+    const countryData = [
+      {
+        name: 'United States', flag: '🇺🇸', lat: 37.09, lng: -95.71,
+        adoption: '78%', market: '$500B+',
+        sector: 'Tech & Research',
+        namePT: 'Estados Unidos'
+      },
+      {
+        name: 'China', flag: '🇨🇳', lat: 35.86, lng: 104.19,
+        adoption: '85%', market: '$150B+',
+        sector: 'Government & Industry',
+        namePT: 'China'
+      },
+      {
+        name: 'Brazil', flag: '🇧🇷', lat: -14.23, lng: -51.92,
+        adoption: '52%', market: '$8B+',
+        sector: 'Agile Adoption in LatAm',
+        namePT: 'Brasil'
+      },
+      {
+        name: 'United Kingdom', flag: '🇬🇧', lat: 55.37, lng: -3.43,
+        adoption: '65%', market: '$25B+',
+        sector: 'AI Research Hub',
+        namePT: 'Reino Unido'
+      },
+      {
+        name: 'Germany', flag: '🇩🇪', lat: 51.16, lng: 10.45,
+        adoption: '62%', market: '$22B+',
+        sector: 'Industry 4.0',
+        namePT: 'Alemanha'
+      },
+      {
+        name: 'India', flag: '🇮🇳', lat: 20.59, lng: 78.96,
+        adoption: '58%', market: '$12B+',
+        sector: 'Startup Growth',
+        namePT: 'Índia'
+      },
+      {
+        name: 'Japan', flag: '🇯🇵', lat: 36.20, lng: 138.25,
+        adoption: '55%', market: '$15B+',
+        sector: 'Robotics & Automation',
+        namePT: 'Japão'
+      },
+      {
+        name: 'Canada', flag: '🇨🇦', lat: 56.13, lng: -106.34,
+        adoption: '60%', market: '$10B+',
+        sector: 'AI Research (Mila)',
+        namePT: 'Canadá'
+      },
+      {
+        name: 'France', flag: '🇫🇷', lat: 46.22, lng: 2.21,
+        adoption: '56%', market: '$12B+',
+        sector: 'National AI Strategy',
+        namePT: 'França'
+      },
+      {
+        name: 'South Korea', flag: '🇰🇷', lat: 35.90, lng: 127.76,
+        adoption: '63%', market: '$8B+',
+        sector: 'Chaebol Investment',
+        namePT: 'Coreia do Sul'
+      },
+      {
+        name: 'Mexico', flag: '🇲🇽', lat: 23.63, lng: -102.55,
+        adoption: '38%', market: '$3B+',
+        sector: 'Manufacturing AI',
+        namePT: 'México'
+      },
+      {
+        name: 'Argentina', flag: '🇦🇷', lat: -38.41, lng: -63.61,
+        adoption: '34%', market: '$1.5B+',
+        sector: 'Startup Ecosystem',
+        namePT: 'Argentina'
+      },
+      {
+        name: 'Colombia', flag: '🇨🇴', lat: 4.57, lng: -74.29,
+        adoption: '30%', market: '$1B+',
+        sector: 'Emerging Tech Hub',
+        namePT: 'Colômbia'
+      },
+      {
+        name: 'Saudi Arabia', flag: '🇸🇦', lat: 23.88, lng: 45.07,
+        adoption: '55%', market: '$6B+',
+        sector: 'Vision 2030 AI',
+        namePT: 'Arábia Saudita'
+      },
+      {
+        name: 'UAE', flag: '🇦🇪', lat: 23.42, lng: 53.85,
+        adoption: '58%', market: '$4B+',
+        sector: 'Smart City AI',
+        namePT: 'EAU'
+      },
+      {
+        name: 'Singapore', flag: '🇸🇬', lat: 1.35, lng: 103.82,
+        adoption: '68%', market: '$5B+',
+        sector: 'Financial AI',
+        namePT: 'Singapura'
+      },
+      {
+        name: 'Australia', flag: '🇦🇺', lat: -25.27, lng: 133.77,
+        adoption: '54%', market: '$7B+',
+        sector: 'Resources & Health AI',
+        namePT: 'Austrália'
+      },
+      {
+        name: 'Israel', flag: '🇮🇱', lat: 31.04, lng: 34.78,
+        adoption: '57%', market: '$4B+',
+        sector: 'Cybersecurity AI',
+        namePT: 'Israel'
+      },
+      {
+        name: 'Sweden', flag: '🇸🇪', lat: 60.12, lng: 18.64,
+        adoption: '60%', market: '$4.5B+',
+        sector: 'Innovation & Sustainability',
+        namePT: 'Suécia'
+      },
+      {
+        name: 'Netherlands', flag: '🇳🇱', lat: 52.13, lng: 5.29,
+        adoption: '58%', market: '$5B+',
+        sector: 'Logistics & Agriculture AI',
+        namePT: 'Países Baixos'
+      },
+      {
+        name: 'Switzerland', flag: '🇨🇭', lat: 46.81, lng: 8.22,
+        adoption: '61%', market: '$4B+',
+        sector: 'Finance & Pharma AI',
+        namePT: 'Suíça'
+      },
+      {
+        name: 'Denmark', flag: '🇩🇰', lat: 56.26, lng: 9.50,
+        adoption: '55%', market: '$2.5B+',
+        sector: 'Green AI & Life Sciences',
+        namePT: 'Dinamarca'
+      },
+      {
+        name: 'Nigeria', flag: '🇳🇬', lat: 9.08, lng: 8.67,
+        adoption: '25%', market: '$0.8B+',
+        sector: 'Fintech AI',
+        namePT: 'Nigéria'
+      },
+      {
+        name: 'South Africa', flag: '🇿🇦', lat: -30.55, lng: 22.93,
+        adoption: '35%', market: '$1.2B+',
+        sector: 'Mining & Telecom AI',
+        namePT: 'África do Sul'
+      },
+      {
+        name: 'Spain', flag: '🇪🇸', lat: 40.46, lng: -3.74,
+        adoption: '48%', market: '$5B+',
+        sector: 'Tourism & Energy AI',
+        namePT: 'Espanha'
+      },
+      {
+        name: 'Italy', flag: '🇮🇹', lat: 41.87, lng: 12.56,
+        adoption: '44%', market: '$4B+',
+        sector: 'Manufacturing AI',
+        namePT: 'Itália'
+      },
+      {
+        name: 'Poland', flag: '🇵🇱', lat: 51.91, lng: 19.14,
+        adoption: '42%', market: '$3B+',
+        sector: 'BPO & IT Services AI',
+        namePT: 'Polônia'
+      },
+      {
+        name: 'Indonesia', flag: '🇮🇩', lat: -0.78, lng: 113.92,
+        adoption: '32%', market: '$3B+',
+        sector: 'Digital Economy AI',
+        namePT: 'Indonésia'
+      },
+      {
+        name: 'Vietnam', flag: '🇻🇳', lat: 14.05, lng: 108.27,
+        adoption: '28%', market: '$1.5B+',
+        sector: 'Manufacturing AI',
+        namePT: 'Vietnã'
+      },
+      {
+        name: 'Thailand', flag: '🇹🇭', lat: 15.87, lng: 100.99,
+        adoption: '36%', market: '$2.5B+',
+        sector: 'Tourism & Agriculture AI',
+        namePT: 'Tailândia'
+      },
+    ];
+
+    // ── Interactive Globe Three.js Setup ──
+    const iGlobeCanvas = document.getElementById('interactiveGlobeCanvas');
+    const iRenderer = new THREE.WebGLRenderer({ canvas: iGlobeCanvas, alpha: true, antialias: true });
+    iRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    function getIGlobeSize() {
+      const vw = window.innerWidth;
+      if (vw >= 1024) return 520;
+      if (vw >= 768) return 400;
+      return 320;
+    }
+    const iSize = getIGlobeSize();
+    iRenderer.setSize(iSize, iSize);
+
+    const iScene = new THREE.Scene();
+    const iCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+    iCamera.position.z = 3;
+
+    // Earth
+    const iEarthGeo = new THREE.SphereGeometry(1, 64, 64);
+    const iTextureLoader = new THREE.TextureLoader();
+    const iEarthMat = new THREE.MeshPhongMaterial({
+      map: iTextureLoader.load('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'),
+      bumpMap: iTextureLoader.load('https://unpkg.com/three-globe/example/img/earth-topology.png'),
       bumpScale: 0.04,
       specular: new THREE.Color(0x111111),
       shininess: 5,
     });
-    const earth = new THREE.Mesh(earthGeo, earthMat);
-    scene.add(earth);
+    const iEarth = new THREE.Mesh(iEarthGeo, iEarthMat);
+    iScene.add(iEarth);
 
-    const atmoGeo = new THREE.SphereGeometry(1.15, 64, 64);
-    const atmoMat = new THREE.ShaderMaterial({
+    // Atmosphere
+    const iAtmoGeo = new THREE.SphereGeometry(1.15, 64, 64);
+    const iAtmoMat = new THREE.ShaderMaterial({
       uniforms: { glowColor: { value: new THREE.Color(0x3a8fff) } },
       vertexShader: `
         varying vec3 vNormal;
@@ -1526,38 +2099,26 @@
       blending: THREE.AdditiveBlending,
       transparent: true,
     });
-    const atmosphere = new THREE.Mesh(atmoGeo, atmoMat);
-    scene.add(atmosphere);
+    const iAtmosphere = new THREE.Mesh(iAtmoGeo, iAtmoMat);
+    iScene.add(iAtmosphere);
 
-    const wireGeo = new THREE.SphereGeometry(1.01, 32, 32);
-    const wireMat = new THREE.MeshBasicMaterial({
-      color: 0xF5D000,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.03,
+    // Wireframe
+    const iWireGeo = new THREE.SphereGeometry(1.01, 32, 32);
+    const iWireMat = new THREE.MeshBasicMaterial({
+      color: 0xF5D000, wireframe: true, transparent: true, opacity: 0.03,
     });
-    const wireframe = new THREE.Mesh(wireGeo, wireMat);
-    scene.add(wireframe);
+    const iWireframe = new THREE.Mesh(iWireGeo, iWireMat);
+    iScene.add(iWireframe);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-    scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
-    directionalLight.position.set(5, 3, 5);
-    scene.add(directionalLight);
-    const pointLight = new THREE.PointLight(0x3a8fff, 0.5, 10);
-    pointLight.position.set(-3, -2, 3);
-    scene.add(pointLight);
-
-    const cityData = [
-      { lat: -23.55, lng: -46.63, name: 'Sao Paulo' },
-      { lat: 40.71, lng: -74.01, name: 'New York' },
-      { lat: 51.51, lng: -0.13, name: 'London' },
-      { lat: 35.68, lng: 139.69, name: 'Tokyo' },
-      { lat: -33.87, lng: 151.21, name: 'Sydney' },
-      { lat: 55.75, lng: 37.62, name: 'Moscow' },
-      { lat: 19.08, lng: 72.88, name: 'Mumbai' },
-      { lat: -23.36, lng: -46.63, name: 'Campinas' },
-    ];
+    // Lights
+    const iAmbient = new THREE.AmbientLight(0xffffff, 0.3);
+    iScene.add(iAmbient);
+    const iDir = new THREE.DirectionalLight(0xffffff, 1.2);
+    iDir.position.set(5, 3, 5);
+    iScene.add(iDir);
+    const iPoint = new THREE.PointLight(0x3a8fff, 0.5, 10);
+    iPoint.position.set(-3, -2, 3);
+    iScene.add(iPoint);
 
     function latLngToVec3(lat, lng, radius) {
       const phi = (90 - lat) * (Math.PI / 180);
@@ -1569,86 +2130,147 @@
       );
     }
 
-    const dotGeo = new THREE.SphereGeometry(0.015, 8, 8);
-    const dotMat = new THREE.MeshBasicMaterial({ color: 0xF5D000 });
-    const dotMeshes = [];
-    cityData.forEach(city => {
-      const dot = new THREE.Mesh(dotGeo, dotMat.clone());
-      const pos = latLngToVec3(city.lat, city.lng, 1.02);
-      dot.position.copy(pos);
-      dotMeshes.push(dot);
-      scene.add(dot);
+    // Create country markers
+    const markerGroup = new THREE.Group();
+    const markerMeshes = [];
+
+    countryData.forEach((country, i) => {
+      const pos = latLngToVec3(country.lat, country.lng, 1.025);
+
+      // Outer glow ring
+      const ringGeo = new THREE.RingGeometry(0.022, 0.032, 16);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: 0xF5D000, side: THREE.DoubleSide, transparent: true, opacity: 0.5,
+      });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.position.copy(pos);
+      ring.lookAt(new THREE.Vector3(0, 0, 0));
+      markerGroup.add(ring);
+
+      // Core dot
+      const markerGeo = new THREE.SphereGeometry(0.012, 8, 8);
+      const markerMat = new THREE.MeshBasicMaterial({ color: 0xF5D000 });
+      const marker = new THREE.Mesh(markerGeo, markerMat);
+      marker.position.copy(pos);
+      marker.userData = { countryIndex: i, originalScale: 1 };
+      markerMeshes.push(marker);
+      markerGroup.add(marker);
     });
 
-    const arcMat = new THREE.LineBasicMaterial({ color: 0xF5D000, transparent: true, opacity: 0.15 });
-    const arcPairs = [[0,1],[0,3],[0,4],[1,3],[2,3],[1,5],[3,6],[4,7]];
-    arcPairs.forEach(([a, b]) => {
-      const start = latLngToVec3(cityData[a].lat, cityData[a].lng, 1.02);
-      const end = latLngToVec3(cityData[b].lat, cityData[b].lng, 1.02);
-      const mid = start.clone().add(end).multiplyScalar(0.5);
-      const len = start.distanceTo(end);
-      mid.normalize().multiplyScalar(1.05 + len * 0.2);
+    iScene.add(markerGroup);
 
-      const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
-      const points = curve.getPoints(40);
-      const geo = new THREE.BufferGeometry().setFromPoints(points);
-      const line = new THREE.Line(geo, arcMat);
-      scene.add(line);
-    });
+    // Raycaster for click detection
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
 
-    let targetRotX = 0, targetRotY = 0;
-    let currentRotX = 0, currentRotY = 0;
+    // Data card element
+    const dataCard = document.getElementById('dataCard');
+    let activeCountry = null;
 
-    document.addEventListener('mousemove', (e) => {
-      const rect = globeCanvas.getBoundingClientRect();
-      if (e.clientX >= rect.left && e.clientX <= rect.right &&
-          e.clientY >= rect.top && e.clientY <= rect.bottom) {
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        targetRotY = ((e.clientX - cx) / rect.width) * 0.4;
-        targetRotX = ((e.clientY - cy) / rect.height) * 0.3;
+    function showDataCard(country, clientX, clientY) {
+      const name = currentLang === 'pt' ? (country.namePT || country.name) : country.name;
+      document.getElementById('cardFlag').textContent = country.flag;
+      document.getElementById('cardName').textContent = name;
+      document.getElementById('cardSector').textContent = country.sector;
+      document.getElementById('cardAdoption').textContent = country.adoption;
+      document.getElementById('cardMarket').textContent = country.market;
+
+      // Position card
+      const cardW = 280, cardH = 200;
+      let left = clientX + 20;
+      let top = clientY - 20;
+      if (left + cardW > window.innerWidth - 10) left = clientX - cardW - 20;
+      if (top + cardH > window.innerHeight - 10) top = clientY - cardH - 20;
+
+      dataCard.style.left = left + 'px';
+      dataCard.style.top = top + 'px';
+      dataCard.classList.add('visible');
+      activeCountry = country;
+    }
+
+    function hideDataCard() {
+      dataCard.classList.remove('visible');
+      activeCountry = null;
+    }
+
+    iGlobeCanvas.addEventListener('mousemove', (e) => {
+      const rect = iGlobeCanvas.getBoundingClientRect();
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, iCamera);
+      const intersects = raycaster.intersectObjects(markerMeshes);
+
+      if (intersects.length > 0) {
+        const idx = intersects[0].object.userData.countryIndex;
+        showDataCard(countryData[idx], e.clientX, e.clientY);
+        cursor.classList.add('hover');
+      } else {
+        hideDataCard();
+        cursor.classList.remove('hover');
       }
     });
 
-    let globePhase = 0;
-    function animateGlobe() {
-      globePhase += 0.003;
+    iGlobeCanvas.addEventListener('mouseleave', hideDataCard);
 
-      earth.rotation.y += 0.002;
-      wireframe.rotation.y += 0.002;
-      atmosphere.rotation.y += 0.001;
+    // Auto-rotate for interactive globe
+    let iTargetRotY = 0;
+    let iCurrentRotY = 0;
+    let iGlobePhase = 0;
+    let autoRotate = true;
+    let autoRotateTimer = null;
 
-      currentRotX += (targetRotX - currentRotX) * 0.05;
-      currentRotY += (targetRotY - currentRotY) * 0.05;
+    function resetAutoRotate() {
+      autoRotate = false;
+      clearTimeout(autoRotateTimer);
+      autoRotateTimer = setTimeout(() => { autoRotate = true; }, 3000);
+    }
 
-      earth.rotation.x += (currentRotX - earth.rotation.x) * 0.05;
-      earth.rotation.z += (currentRotY - earth.rotation.z) * 0.05;
+    iGlobeCanvas.addEventListener('mousedown', () => {
+      resetAutoRotate();
+    });
 
-      atmosphere.rotation.x = earth.rotation.x;
-      atmosphere.rotation.z = earth.rotation.z;
-      wireframe.rotation.x = earth.rotation.x;
-      wireframe.rotation.z = earth.rotation.z;
+    function animateIGlobe() {
+      iGlobePhase += 0.003;
 
-      dotMeshes.forEach((dot, i) => {
-        const s = 0.8 + 0.4 * Math.sin(globePhase * 2 + i * 0.8);
-        dot.material.opacity = s;
-        dot.scale.setScalar(s);
+      iEarth.rotation.y += 0.001;
+      iWireframe.rotation.y += 0.001;
+      iAtmosphere.rotation.y += 0.0005;
+      iWireframe.rotation.x = iEarth.rotation.x;
+      iWireframe.rotation.z = iEarth.rotation.z;
+      iAtmosphere.rotation.x = iEarth.rotation.x;
+      iAtmosphere.rotation.z = iEarth.rotation.z;
+      markerGroup.rotation.y = iEarth.rotation.y;
+      markerGroup.rotation.x = iEarth.rotation.x;
+      markerGroup.rotation.z = iEarth.rotation.z;
+
+      // Slow auto-rotate Y
+      if (autoRotate) {
+        iCurrentRotY += 0.0008;
+        iEarth.rotation.y = iCurrentRotY;
+        markerGroup.rotation.y = iCurrentRotY;
+      }
+
+      // Pulse markers
+      markerMeshes.forEach((m, i) => {
+        const s = 0.7 + 0.3 * Math.sin(iGlobePhase * 2 + i * 0.5);
+        m.scale.setScalar(s);
+        m.material.opacity = s;
       });
 
-      renderer.render(scene, camera);
-      requestAnimationFrame(animateGlobe);
+      iRenderer.render(iScene, iCamera);
+      requestAnimationFrame(animateIGlobe);
     }
 
-    function resizeGlobe() {
-      const size = Math.min(480, Math.min(window.innerWidth * 0.6, window.innerHeight * 0.5));
-      renderer.setSize(size, size);
-      camera.aspect = 1;
-      camera.updateProjectionMatrix();
+    function resizeIGlobe() {
+      const s = getIGlobeSize();
+      iRenderer.setSize(s, s);
+      iCamera.aspect = 1;
+      iCamera.updateProjectionMatrix();
     }
-    resizeGlobe();
-    window.addEventListener('resize', resizeGlobe);
 
-    animateGlobe();
+    animateIGlobe();
+    window.addEventListener('resize', resizeIGlobe);
 
     // ═══════════════════════════════════════════════
     // GRID CANVAS
@@ -1751,8 +2373,7 @@
     // ═══════════════════════════════════════════════
     // 3D TILT ON CARDS
     // ═══════════════════════════════════════════════
-    const tiltCards = document.querySelectorAll('[data-tilt]');
-    tiltCards.forEach(card => {
+    document.querySelectorAll('[data-tilt]').forEach(card => {
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
         const cx = rect.left + rect.width / 2;
@@ -1768,17 +2389,17 @@
 
     // Magnetic hover for buttons
     document.querySelectorAll('.contact-card, .service-card').forEach(el => {
+      let baseTransform = '';
       el.addEventListener('mousemove', (e) => {
         const rect = el.getBoundingClientRect();
         const cx = rect.left + rect.width / 2;
         const cy = rect.top + rect.height / 2;
         const dx = (e.clientX - cx) * 0.15;
         const dy = (e.clientY - cy) * 0.15;
-        el.style.transform += ` translate(${dx}px, ${dy}px)`;
+        el.style.transform = baseTransform + ` translate(${dx}px, ${dy}px)`;
       });
       el.addEventListener('mouseleave', () => {
-        const base = el.classList.contains('project-card') ? 'translateY(0)' : 'translate(0, 0)';
-        el.style.transform = el.style.transform.replace(/translate\([^)]+\)/g, '');
+        el.style.transform = baseTransform;
       });
     });
 
@@ -1790,8 +2411,8 @@
       if (!ticking) {
         requestAnimationFrame(() => {
           const scrollY = window.scrollY;
-          const hero = document.querySelector('.hero-content');
-          if (hero) hero.style.transform = `translateY(${scrollY * 0.3}px)`;
+          const heroText = document.querySelector('.hero-text-side');
+          if (heroText) heroText.style.transform = `translateY(${scrollY * 0.2}px)`;
           ticking = false;
         });
         ticking = true;
