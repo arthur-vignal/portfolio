@@ -698,9 +698,11 @@
     /* Team */
     .team-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 24px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
       margin-top: 60px;
+      width: 100%;
+      max-width: 100%;
     }
     .team-card {
       padding: 32px;
@@ -737,6 +739,22 @@
     .team-card p {
       font-size: 12px; color: var(--text-muted);
       line-height: 1.7;
+    }
+
+    /* Full-width team section */
+    .team-fullwidth {
+      margin-top: 100px;
+      padding-top: 60px;
+      border-top: 1px solid var(--line-bright);
+    }
+    .team-fullwidth h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--yellow);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+      opacity: 0.5;
     }
 
     /* Why Kibo */
@@ -1213,27 +1231,6 @@
         <p class="about-text reveal d2" data-pt="Nosso projeto principal é o <strong style='color:var(--text)'>RadioeXperience</strong>, uma plataforma de ensino de radiologia que combina conteúdo médico estruturado com busca powered by IA e assistência diagnóstica através do nosso assistente proprietário <strong style='color:var(--text)'>ARIA</strong>." data-en="Our flagship project is <strong style='color:var(--text)'>RadioeXperience</strong>, a radiology teaching platform that combines structured medical content with AI-powered search and diagnosis assistance through our proprietary assistant <strong style='color:var(--text)'>ARIA</strong>.">Nosso projeto principal é o <strong style='color:var(--text)'>RadioeXperience</strong>, uma plataforma de ensino de radiologia que combina conteúdo médico estruturado com busca powered by IA e assistência diagnóstica através do nosso assistente proprietário <strong style='color:var(--text)'>ARIA</strong>.</p>
         <p class="about-text reveal d3" data-pt="Parcerizamos com instituições de saúde, startups inovadoras e empresas estabelecidas que querem usar inteligência artificial como vantagem competitiva — com segurança, praticidade e ética." data-en="We partner with healthcare institutions, innovative startups, and established businesses that want to leverage artificial intelligence as a competitive edge — safely, practically, and ethically.">Parcerizamos com instituições de saúde, startups inovadoras e empresas estabelecidas que querem usar inteligência artificial como vantagem competitiva — com segurança, praticidade e ética.</p>
 
-        <div class="team-grid reveal d4">
-          <div class="team-card">
-            <div class="team-avatar">AV</div>
-            <h4>Arthur Vignal</h4>
-            <div class="role" data-pt="Desenvolvedor & Co-fundador" data-en="Developer & Co-founder">Desenvolvedor & Co-fundador</div>
-            <p data-pt="Engenheiro de Produção cursando na UFRJ. Desenvolvedor full-stack especializado em arquitetura de produtos de IA. Constrói sistemas robustos e escaláveis que dão vida a aplicações inteligentes, do conceito à produção." data-en="Production Engineering student at UFRJ. Full-stack developer specialized in AI product architecture. Builds robust, scalable systems that power intelligent applications from concept to production.">Engenheiro de Produção cursando na UFRJ. Desenvolvedor full-stack especializado em arquitetura de produtos de IA. Constrói sistemas robustos e escaláveis que dão vida a aplicações inteligentes, do conceito à produção.</p>
-          </div>
-          <div class="team-card">
-            <div class="team-avatar">MV</div>
-            <h4>Miguel Vignal</h4>
-            <div class="role" data-pt="Engenheiro de Produção & Co-fundador" data-en="Production Engineer & Co-founder">Engenheiro de Produção & Co-fundador</div>
-            <p data-pt="Engenheiro de Produção cursando na UFRJ, 3º período. Especialista em processos, dados e otimização de sistemas. Aplica raciocínio analítico para transformar dados em decisões inteligentes e produtos que escalam." data-en="Production Engineering student at UFRJ, 3rd semester. Specialist in processes, data, and system optimization. Applies analytical thinking to turn data into intelligent decisions and products that scale.">Engenheiro de Produção cursando na UFRJ, 3º período. Especialista em processos, dados e otimização de sistemas. Aplica raciocínio analítico para transformar dados em decisões inteligentes e produtos que escalam.</p>
-          </div>
-          <div class="team-card">
-            <div class="team-avatar">VV</div>
-            <h4>Victor Vignal</h4>
-            <div class="role" data-pt="Psicólogo & Co-fundador" data-en="Psychologist & Co-founder">Psicólogo & Co-fundador</div>
-            <p data-pt="Psicólogo cursando na PUC-Rio. Com profunda expertise em aplicações de IA na saúde mental e neurociência. Garante que nossos produtos atendam padrões clínicos e entreguem valor real para profissionais e pacientes." data-en="Psychology student at PUC-Rio. Deep expertise in AI applications in mental health and neuroscience. Ensures our products meet clinical standards and deliver real value for professionals and patients.">Psicólogo cursando na PUC-Rio. Com profunda expertise em aplicações de IA na saúde mental e neurociência. Garante que nossos produtos atendam padrões clínicos e entreguem valor real para profissionais e pacientes.</p>
-          </div>
-        </div>
-
         <div class="why-kibo reveal d5">
           <h4 data-pt="Por que Kibo" data-en="Why Kibo">Por que Kibo</h4>
           <ul class="why-list">
@@ -1244,6 +1241,30 @@
             <li data-pt="Equipe pequena, alta responsabilização, execução rápida" data-en="Small team, high accountability, fast execution">Equipe pequena, alta responsabilização, execução rápida</li>
             <li data-pt="Foco em segurança, equidade e interpretabilidade da IA" data-en="Focus on AI safety, fairness, and interpretability">Foco em segurança, equidade e interpretabilidade da IA</li>
           </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-fullwidth">
+      <h3 class="reveal" data-pt="Nossa Equipe" data-en="Our Team">Nossa Equipe</h3>
+      <div class="team-grid reveal d2">
+        <div class="team-card">
+          <div class="team-avatar">AV</div>
+          <h4>Arthur Vignal</h4>
+          <div class="role" data-pt="Desenvolvedor & Co-fundador" data-en="Developer & Co-founder">Desenvolvedor & Co-fundador</div>
+          <p data-pt="Engenheiro de Produção cursando na UFRJ. Desenvolvedor full-stack especializado em arquitetura de produtos de IA. Constrói sistemas robustos e escaláveis que dão vida a aplicações inteligentes, do conceito à produção." data-en="Production Engineering student at UFRJ. Full-stack developer specialized in AI product architecture. Builds robust, scalable systems that power intelligent applications from concept to production.">Engenheiro de Produção cursando na UFRJ. Desenvolvedor full-stack especializado em arquitetura de produtos de IA. Constrói sistemas robustos e escaláveis que dão vida a aplicações inteligentes, do conceito à produção.</p>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">MV</div>
+          <h4>Miguel Vignal</h4>
+          <div class="role" data-pt="Engenheiro de Produção & Co-fundador" data-en="Production Engineer & Co-founder">Engenheiro de Produção & Co-fundador</div>
+          <p data-pt="Engenheiro de Produção cursando na UFRJ, 3º período. Especialista em processos, dados e otimização de sistemas. Aplica raciocínio analítico para transformar dados em decisões inteligentes e produtos que escalam." data-en="Production Engineering student at UFRJ, 3rd semester. Specialist in processes, data, and system optimization. Applies analytical thinking to turn data into intelligent decisions and products that scale.">Engenheiro de Produção cursando na UFRJ, 3º período. Especialista em processos, dados e otimização de sistemas. Aplica raciocínio analítico para transformar dados em decisões inteligentes e produtos que escalam.</p>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">VV</div>
+          <h4>Victor Vignal</h4>
+          <div class="role" data-pt="Psicólogo & Co-fundador" data-en="Psychologist & Co-founder">Psicólogo & Co-fundador</div>
+          <p data-pt="Psicólogo cursando na PUC-Rio. Com profunda expertise em aplicações de IA na saúde mental e neurociência. Garante que nossos produtos atendam padrões clínicos e entreguem valor real para profissionais e pacientes." data-en="Psychology student at PUC-Rio. Deep expertise in AI applications in mental health and neuroscience. Ensures our products meet clinical standards and deliver real value for professionals and patients.">Psicólogo cursando na PUC-Rio. Com profunda expertise em aplicações de IA na saúde mental e neurociência. Garante que nossos produtos atendam padrões clínicos e entreguem valor real para profissionais e pacientes.</p>
         </div>
       </div>
     </div>
