@@ -1111,7 +1111,7 @@
     <!-- Right half: Text -->
     <div class="hero-text-side">
       <h1 class="hero-kibo-title">
-        <span class="accent">KIBO</span>
+        <span class="accent">KIBO AI</span>
       </h1>
       <div class="hero-solutions" data-pt="Solutions" data-en="Solutions">Solutions</div>
       <p class="hero-sub" data-pt="Construímos produtos de IA do zero e aplicamos inteligência em negócios existentes — trazendo precisão, inovação e impacto mensurável." data-en="We build AI products from scratch and apply intelligence to existing businesses — bringing precision, innovation, and measurable impact.">Construímos produtos de IA do zero e aplicamos inteligência em negócios existentes — trazendo precisão, inovação e impacto mensurável.</p>
@@ -1772,39 +1772,6 @@
       pointLight.position.set(-3, -2, 3);
       heroScene.add(pointLight);
 
-      // City dots for hero globe
-      const cityData = [
-        { lat: -23.55, lng: -46.63 },
-        { lat: 40.71, lng: -74.01 },
-        { lat: 51.51, lng: -0.13 },
-        { lat: 35.68, lng: 139.69 },
-        { lat: -33.87, lng: 151.21 },
-        { lat: 19.08, lng: 72.88 },
-        { lat: 55.75, lng: 37.62 },
-        { lat: -23.36, lng: -46.63 },
-      ];
-
-      function latLngToVec3(lat, lng, radius) {
-        const phi = (90 - lat) * (Math.PI / 180);
-        const theta = (lng + 180) * (Math.PI / 180);
-        return new THREE.Vector3(
-          -radius * Math.sin(phi) * Math.cos(theta),
-          radius * Math.cos(phi),
-          radius * Math.sin(phi) * Math.sin(theta)
-        );
-      }
-
-      const dotGeo = new THREE.SphereGeometry(0.015, 8, 8);
-      const dotMat = new THREE.MeshBasicMaterial({ color: 0xF5D000 });
-      const dotMeshes = [];
-      cityData.forEach(city => {
-        const dot = new THREE.Mesh(dotGeo, dotMat.clone());
-        const pos = latLngToVec3(city.lat, city.lng, 1.02);
-        dot.position.copy(pos);
-        dotMeshes.push(dot);
-        heroScene.add(dot);
-      });
-
       let targetRotX = 0, targetRotY = 0;
       let currentRotX = 0, currentRotY = 0;
       let globePhase = 0;
@@ -2148,13 +2115,22 @@
       markerGroup.add(ring);
 
       // Core dot
-      const markerGeo = new THREE.SphereGeometry(0.012, 8, 8);
+      const markerGeo = new THREE.SphereGeometry(0.025, 8, 8);
       const markerMat = new THREE.MeshBasicMaterial({ color: 0xF5D000 });
       const marker = new THREE.Mesh(markerGeo, markerMat);
       marker.position.copy(pos);
       marker.userData = { countryIndex: i, originalScale: 1 };
       markerMeshes.push(marker);
       markerGroup.add(marker);
+
+      // Invisible hitbox for easier click/hover detection
+      const hitboxGeo = new THREE.SphereGeometry(0.08, 8, 8);
+      const hitboxMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
+      const hitbox = new THREE.Mesh(hitboxGeo, hitboxMat);
+      hitbox.position.copy(pos);
+      hitbox.userData = { countryIndex: i, originalScale: 1 };
+      markerMeshes.push(hitbox);
+      markerGroup.add(hitbox);
     });
 
     iScene.add(markerGroup);
